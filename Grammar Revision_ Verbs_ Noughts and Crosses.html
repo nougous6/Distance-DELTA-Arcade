@@ -1,0 +1,1309 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Distance DELTA Noughts & Crosses</title>
+    <style>
+        /* --- Branded Design System --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a1628;
+            color: #e8f0fe;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a3a6a, #0a1628 80%),
+                radial-gradient(circle at 80% 70%, #1a2a4a, transparent 60%);
+        }
+        .game-container {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header with Logo --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.15);
+            flex-shrink: 0;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+        .logo .distance {
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #8a9bb5;
+            text-transform: uppercase;
+        }
+        .logo .delta {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #d4af37, #f5d77b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            margin-top: -2px;
+        }
+        .logo-divider {
+            width: 2px;
+            height: 24px;
+            background: linear-gradient(to bottom, #d4af37, transparent);
+            opacity: 0.3;
+        }
+        .header h1 {
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #b0c4e8;
+            letter-spacing: -0.3px;
+        }
+        .header .sub {
+            font-size: 0.5rem;
+            opacity: 0.5;
+            font-weight: 400;
+            color: #8a9bb5;
+            display: block;
+            margin-top: 1px;
+        }
+
+        /* --- Stats Bar --- */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.55rem;
+        }
+        .stat-item .icon {
+            font-size: 0.7rem;
+        }
+        .stat-item .value {
+            font-weight: 700;
+            color: #f5d77b;
+            font-size: 0.65rem;
+            min-width: 16px;
+        }
+        .stat-item .label {
+            opacity: 0.5;
+            font-weight: 400;
+            font-size: 0.5rem;
+        }
+        .stat-item .score-value {
+            font-weight: 700;
+            font-size: 0.8rem;
+            min-width: 20px;
+        }
+        .stat-item .score-value.you-score {
+            color: #5adc8c;
+        }
+        .stat-item .score-value.avatar-score {
+            color: #ff6b6b;
+        }
+
+        /* --- Game Status --- */
+        .game-status {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #b0c4e8;
+            padding: 4px 0;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+        .game-status .highlight {
+            color: #f5d77b;
+            font-weight: 600;
+        }
+
+        /* --- Avatar Character --- */
+        .avatar-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .avatar-display .avatar-face {
+            font-size: 1.8rem;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+        .avatar-display .avatar-status {
+            font-size: 0.6rem;
+            opacity: 0.6;
+            color: #b0c4e8;
+        }
+        .avatar-display .avatar-name {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+        .avatar-display .avatar-face.thinking {
+            animation: avatarThink 0.8s ease infinite;
+        }
+        @keyframes avatarThink {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.15) rotate(-8deg); }
+            75% { transform: scale(1.15) rotate(8deg); }
+        }
+        .avatar-display .avatar-face.happy {
+            animation: avatarHappy 0.5s ease;
+        }
+        @keyframes avatarHappy {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+        }
+        .avatar-display .avatar-face.sad {
+            animation: avatarSad 0.5s ease;
+        }
+        @keyframes avatarSad {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.8) rotate(10deg); }
+        }
+
+        /* --- Board --- */
+        .board-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            width: 100%;
+            max-width: 360px;
+            aspect-ratio: 1;
+        }
+        .cell {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            aspect-ratio: 1;
+            user-select: none;
+        }
+        .cell:hover:not(.taken):not(.game-over) {
+            background: rgba(212, 175, 55, 0.06);
+            border-color: rgba(212, 175, 55, 0.2);
+            transform: scale(1.02);
+        }
+        .cell.taken {
+            cursor: default;
+        }
+        .cell.taken.x {
+            color: #5adc8c;
+            border-color: rgba(90, 220, 140, 0.2);
+            background: rgba(90, 220, 140, 0.04);
+        }
+        .cell.taken.o {
+            color: #ff6b6b;
+            border-color: rgba(255, 80, 80, 0.2);
+            background: rgba(255, 80, 80, 0.04);
+        }
+        .cell.winning {
+            border-color: #f5d77b;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            background: rgba(212, 175, 55, 0.08);
+            animation: winPulse 0.8s ease infinite;
+        }
+        @keyframes winPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .cell.game-over {
+            cursor: default;
+        }
+
+        /* --- Question Area --- */
+        .question-area {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            text-align: center;
+            flex-shrink: 0;
+            min-height: 50px;
+        }
+        .question-area .q-label {
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            margin-bottom: 2px;
+            color: #d4af37;
+            font-weight: 600;
+        }
+        .question-area .q-text {
+            font-size: 0.75rem;
+            color: #e0ecff;
+            font-weight: 500;
+            min-height: 22px;
+            line-height: 1.3;
+        }
+        .question-area .q-text .highlight {
+            color: #f5d77b;
+        }
+        .question-area .q-example {
+            font-size: 0.55rem;
+            color: #aab8d0;
+            font-style: italic;
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+
+        /* --- Options --- */
+        .options-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 5px 8px;
+            font-size: 0.6rem;
+            color: #d0dfff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+        .opt-btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.08);
+            border-color: rgba(212, 175, 55, 0.25);
+        }
+        .opt-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.35;
+        }
+        .opt-btn.correct {
+            background: rgba(90, 220, 140, 0.18);
+            border-color: #5adc8c;
+            color: #b0ffd0;
+        }
+        .opt-btn.wrong {
+            background: rgba(255, 80, 80, 0.18);
+            border-color: #ff6b6b;
+            color: #ffb0b0;
+        }
+
+        /* --- Feedback --- */
+        .feedback {
+            text-align: center;
+            min-height: 18px;
+            font-size: 0.6rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+            padding: 2px 0;
+        }
+        .feedback .correct-fb {
+            color: #5adc8c;
+        }
+        .feedback .wrong-fb {
+            color: #ff6b6b;
+        }
+        .feedback .info-fb {
+            color: #b0c4e8;
+        }
+        .feedback .win-fb {
+            color: #f5d77b;
+        }
+
+        /* --- Controls --- */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(212, 175, 55, 0.06);
+            flex-shrink: 0;
+        }
+        .btn {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #f5d77b;
+            padding: 4px 16px;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 0.6rem;
+            backdrop-filter: blur(4px);
+        }
+        .btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.18);
+            transform: scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.08);
+        }
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37, #b8962e);
+            border: none;
+            color: #0a1628;
+            font-weight: 700;
+            font-size: 0.65rem;
+            padding: 5px 20px;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e5c44a, #c4a030);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #b0c4e8;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- Game Over Modal --- */
+        .gameover-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gameover-overlay.active {
+            opacity: 1;
+        }
+        .gameover-modal {
+            background: linear-gradient(145deg, #0f2240, #0a1628);
+            padding: 28px 32px;
+            border-radius: 28px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            animation: modalPopIn 0.4s ease;
+        }
+        @keyframes modalPopIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .gameover-modal .result-icon {
+            font-size: 52px;
+            line-height: 1.2;
+        }
+        .gameover-modal h2 {
+            font-size: 1.5rem;
+            margin: 4px 0 2px;
+            font-weight: 600;
+        }
+        .gameover-modal .subtitle {
+            opacity: 0.6;
+            margin-bottom: 14px;
+            color: #b0c4e8;
+            font-size: 0.85rem;
+        }
+        .gameover-modal .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin: 12px 0 16px;
+        }
+        .gameover-modal .stat-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 10px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .gameover-modal .stat-box .num {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f5d77b;
+            display: block;
+        }
+        .gameover-modal .stat-box .lbl {
+            font-size: 0.55rem;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .gameover-modal .btn {
+            font-size: 0.8rem;
+            padding: 8px 32px;
+        }
+
+        /* --- Responsive --- */
+        @media(max-width: 450px) {
+            .game-container {
+                padding: 10px;
+                border-radius: 18px;
+            }
+            .cell {
+                font-size: 2.2rem;
+                border-radius: 10px;
+            }
+            .question-area .q-text {
+                font-size: 0.65rem;
+                min-height: 18px;
+            }
+            .question-area .q-example {
+                font-size: 0.5rem;
+            }
+            .options-area {
+                gap: 3px;
+            }
+            .opt-btn {
+                font-size: 0.5rem;
+                padding: 3px 6px;
+                border-radius: 6px;
+            }
+            .header h1 {
+                font-size: 0.7rem;
+            }
+            .logo .delta {
+                font-size: 0.9rem;
+            }
+            .stats-bar {
+                padding: 3px 8px;
+            }
+            .stat-item {
+                font-size: 0.5rem;
+            }
+            .feedback {
+                font-size: 0.55rem;
+                min-height: 16px;
+            }
+            .avatar-display .avatar-face {
+                font-size: 1.4rem;
+            }
+            .gameover-modal {
+                padding: 20px 18px;
+            }
+            .gameover-modal h2 {
+                font-size: 1.2rem;
+            }
+            .controls {
+                gap: 6px;
+            }
+            .btn {
+                font-size: 0.5rem;
+                padding: 3px 12px;
+            }
+        }
+        @media(max-height: 700px) {
+            .game-container {
+                padding: 8px;
+            }
+            .header {
+                margin-bottom: 4px;
+                padding-bottom: 4px;
+            }
+            .stats-bar {
+                padding: 2px 8px;
+                margin-bottom: 4px;
+            }
+            .board {
+                max-width: 280px;
+                gap: 4px;
+            }
+            .cell {
+                font-size: 2rem;
+                border-radius: 8px;
+            }
+            .question-area {
+                padding: 4px 10px;
+                min-height: 36px;
+                margin-bottom: 4px;
+            }
+            .question-area .q-text {
+                font-size: 0.6rem;
+                min-height: 16px;
+            }
+            .options-area {
+                margin-bottom: 4px;
+            }
+            .opt-btn {
+                padding: 2px 6px;
+                font-size: 0.5rem;
+            }
+            .controls {
+                padding-top: 4px;
+            }
+            .feedback {
+                min-height: 14px;
+                font-size: 0.5rem;
+                margin-bottom: 2px;
+            }
+            .avatar-display {
+                margin-bottom: 4px;
+            }
+            .avatar-display .avatar-face {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo">
+                    <span class="distance">The</span>
+                    <span class="distance" style="font-size:0.5rem;letter-spacing:2px;margin-top:-1px;">Distance</span>
+                    <span class="delta">DELTA</span>
+                </div>
+                <div class="logo-divider"></div>
+                <div>
+                    <h1>Noughts &amp; Crosses</h1>
+                    <span class="sub">Grammar Terminology • 27 Terms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="icon">🏆</span>
+                <span class="label">Game:</span>
+                <span class="value" id="gameDisplay">1</span>
+                <span class="label">/ 3</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">👤</span>
+                <span class="label">You:</span>
+                <span class="value score-value you-score" id="youScoreDisplay">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">🤖</span>
+                <span class="label">Avatar:</span>
+                <span class="value score-value avatar-score" id="avatarScoreDisplay">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">📌</span>
+                <span class="label">Called:</span>
+                <span class="value" id="calledDisplay">0</span>
+                <span class="label">/27</span>
+            </div>
+        </div>
+
+        <!-- Game Status -->
+        <div class="game-status" id="gameStatus">
+            🎯 <span class="highlight">Game 1 of 3</span> — Your turn!
+        </div>
+
+        <!-- Avatar Display -->
+        <div class="avatar-display">
+            <span class="avatar-face" id="avatarFace">🤖</span>
+            <span>
+                <span class="avatar-name">AVATAR</span>
+                <span class="avatar-status" id="avatarStatus">Ready to play!</span>
+            </span>
+        </div>
+
+        <!-- Board -->
+        <div class="board-container">
+            <div class="board" id="board">
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+        </div>
+
+        <!-- Question Area -->
+        <div class="question-area">
+            <div class="q-label">📢 Question</div>
+            <div class="q-text" id="questionText">Click a <span class="highlight">square</span> to start a game!</div>
+            <div class="q-example" id="questionExample"></div>
+        </div>
+
+        <!-- Options -->
+        <div class="options-area" id="optionsArea">
+            <button class="opt-btn" data-index="0">Option A</button>
+            <button class="opt-btn" data-index="1">Option B</button>
+            <button class="opt-btn" data-index="2">Option C</button>
+            <button class="opt-btn" data-index="3">Option D</button>
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedback">
+            <span class="info-fb" id="feedbackText">Click a square to begin!</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-secondary" onclick="resetFullGame()">🔄 New Match</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="gameover-overlay" id="gameoverOverlay">
+        <div class="gameover-modal">
+            <div class="result-icon" id="resultIcon">🏆</div>
+            <h2 id="resultTitle">You Win the Series!</h2>
+            <p class="subtitle" id="resultSubtitle">You won 2 out of 3 games! Amazing!</p>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="num" id="finalYouScore">0</span>
+                    <span class="lbl">You</span>
+                </div>
+                <div class="stat-box">
+                    <span class="num" id="finalAvatarScore">0</span>
+                    <span class="lbl">Avatar</span>
+                </div>
+                <div class="stat-box">
+                    <span class="num" id="finalRounds">0</span>
+                    <span class="lbl">Games</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="document.getElementById('gameoverOverlay').style.display='none'; resetFullGame();">🔄 Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: 27 Grammar Terms (Conditional Forms removed) ---
+        const ALL_TERMS = [
+            { term: "Semi-Modals", definition: "Multi-word verbs that function like modals.", example: "📌 'have to,' 'need to,' 'ought to,' 'be able to'" },
+            { term: "Auxiliaries", definition: "Verbs that perform grammatical functions.", example: "📌 'Have' is used before a past participle to form the present perfect simple." },
+            { term: "Participial Adjectives", definition: "Adjectives formed from participles (-ing or -ed).", example: "📌 'boring' vs. 'bored,' 'interesting' vs. 'interested'" },
+            { term: "Nominalisation", definition: "Forming a noun from a verb or adjective.", example: "📌 'develop' → 'development,' 'investigate' → 'investigation'" },
+            { term: "Subject-Verb Agreement", definition: "The verb must agree in number and person with the subject.", example: "📌 'The car runs well.' (singular) vs. 'The cars run well.' (plural)" },
+            { term: "Cleft Sentence", definition: "A sentence split to emphasize a specific element.", example: "📌 'It was John who stole the money.' (emphasizes John)" },
+            { term: "Inversion", definition: "Changing the normal subject-verb order for emphasis or questions.", example: "📌 'Never have I seen such beauty.' (inversion after negative adverb)" },
+            { term: "Quantifiers", definition: "Words expressing quantity before nouns.", example: "📌 'some,' 'any,' 'many,' 'much,' 'a few,' 'a little,' 'plenty of'" },
+            { term: "Demonstratives", definition: "Words that point to specific things.", example: "📌 'this,' 'that,' 'these,' 'those'" },
+            { term: "Possessives", definition: "Words showing ownership or relationship.", example: "📌 'my,' 'your,' 'his,' 'her,' 'its,' 'our,' 'their' (determiners)" },
+            { term: "Defining Relative Clauses", definition: "Clauses which give essential information to identify the noun.", example: "📌 'The man who lives next door' (defines which man)" },
+            { term: "Non-defining Relative Clauses", definition: "Clauses which add extra but non-essential information.", example: "📌 'The man, who lives next door, is a doctor' (adds extra info)" },
+            { term: "Intransitive Verbs", definition: "Verbs that don't take an object.", example: "📌 'She slept.'" },
+            { term: "Transitive Verbs", definition: "Verbs that take an object.", example: "📌 'She bought a car.'" },
+            { term: "Backshift", definition: "A shift in tense in reported speech.", example: "📌 'He said he was tired.'" },
+            { term: "Bare Infinitive", definition: "The base form of a verb without 'to'.", example: "📌 'go' in 'I can go.'" },
+            { term: "Causative 'have'", definition: "A structure where someone causes an action to be done.", example: "📌 'She had her car fixed.'" },
+            { term: "Stative Verbs", definition: "Verbs describing a state, not action.", example: "📌 'love,' 'know,' 'believe'" },
+            { term: "Dynamic Verbs", definition: "Verbs that describe actions.", example: "📌 'run,' 'write,' 'eat'" },
+            { term: "Full Infinitive", definition: "'To' + base form of a verb.", example: "📌 'to eat,' 'to go'" },
+            { term: "Imperative", definition: "A command or request.", example: "📌 'Sit down!'" },
+            { term: "Aspect", definition: "The way a verb expresses time-related features.", example: "📌 continuous (e.g., 'is running'), perfect (e.g., 'has run')" },
+            { term: "Complement", definition: "A word or phrase that completes a sentence.", example: "📌 'She is a teacher.' (complement after 'is')" },
+            { term: "Copula Verbs", definition: "Linking verbs that connect the subject to a complement.", example: "📌 'be,' 'seem,' 'become'" },
+            { term: "Base Form", definition: "The dictionary form of a verb.", example: "📌 'run,' 'eat,' 'go'" },
+            { term: "Passive Voice", definition: "The object becomes the subject; focus is on the action.", example: "📌 'The letter was written.'" },
+            { term: "Subordinate Clause", definition: "A clause that depends on a main clause.", example: "📌 'If it's sunny' (dependent clause), 'I'll go to the park' (main clause)" }
+        ];
+
+        // --- AVATAR FACES ---
+        const AVATAR_FACES = ['🤖', '👾', '🧠', '👽', '🤖', '👾', '🧠', '👽', '🤖'];
+
+        // --- GAME STATE ---
+        let gameState = {
+            game: 1,
+            youScore: 0,
+            avatarScore: 0,
+            board: Array(9).fill(null),
+            currentPlayer: 'you',
+            gameActive: false,
+            isWaitingForAvatar: false,
+            calledTerms: [],
+            currentTerm: null,
+            currentQuestion: null,
+            gameWinner: null,
+            seriesWinner: null,
+            questionActive: false,
+            selectedCell: null,
+            gameFinished: false,
+            seriesFinished: false,
+            currentAvatarFace: '🤖',
+            isTransitioning: false,
+            drawCount: 0
+        };
+
+        const $ = id => document.getElementById(id);
+
+        // --- SHUFFLE FUNCTION ---
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // --- GENERATE NEW AVATAR ---
+        function generateNewAvatar() {
+            let newFace;
+            const availableFaces = AVATAR_FACES.filter(f => f !== gameState.currentAvatarFace);
+            if (availableFaces.length === 0) {
+                newFace = AVATAR_FACES[0];
+            } else {
+                newFace = availableFaces[Math.floor(Math.random() * availableFaces.length)];
+            }
+            gameState.currentAvatarFace = newFace;
+            $('avatarFace').textContent = newFace;
+            return newFace;
+        }
+
+        // --- INITIALISE GAME ---
+        function initGame() {
+            gameState.game = 1;
+            gameState.youScore = 0;
+            gameState.avatarScore = 0;
+            gameState.drawCount = 0;
+            gameState.calledTerms = [];
+            gameState.seriesWinner = null;
+            gameState.seriesFinished = false;
+            gameState.gameFinished = false;
+            gameState.isTransitioning = false;
+            
+            // Generate initial avatar
+            gameState.currentAvatarFace = AVATAR_FACES[Math.floor(Math.random() * AVATAR_FACES.length)];
+            $('avatarFace').textContent = gameState.currentAvatarFace;
+            
+            $('youScoreDisplay').textContent = '0';
+            $('avatarScoreDisplay').textContent = '0';
+            $('calledDisplay').textContent = '0';
+            document.getElementById('gameoverOverlay').style.display = 'none';
+            document.getElementById('gameoverOverlay').classList.remove('active');
+            
+            setAvatarStatus('Ready to play!', '🤖');
+            resetGame();
+        }
+
+        // --- RESET GAME ---
+        function resetGame() {
+            gameState.board = Array(9).fill(null);
+            gameState.currentPlayer = 'you';
+            gameState.gameActive = true;
+            gameState.gameWinner = null;
+            gameState.questionActive = false;
+            gameState.selectedCell = null;
+            gameState.currentTerm = null;
+            gameState.currentQuestion = null;
+            gameState.isWaitingForAvatar = false;
+            gameState.gameFinished = false;
+            gameState.isTransitioning = false;
+            
+            // Reset called terms for new game
+            gameState.calledTerms = [];
+            $('calledDisplay').textContent = '0';
+            
+            $('gameDisplay').textContent = gameState.game;
+            $('gameStatus').innerHTML = `🎯 <span class="highlight">Game ${gameState.game} of 3</span> — Your turn!`;
+            $('feedbackText').textContent = 'Click a square to make your move!';
+            $('feedbackText').className = 'info-fb';
+            $('questionText').innerHTML = 'Click a <span class="highlight">square</span> to start a game!';
+            $('questionExample').textContent = '';
+            $('optionsArea').style.display = 'none';
+            document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            
+            // Reset board
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.className = 'cell';
+                cell.dataset.mark = '';
+                cell.style.color = '';
+            });
+            
+            setAvatarStatus('Your turn!', '🤖');
+            $('avatarFace').className = 'avatar-face';
+        }
+
+        // --- SET AVATAR STATUS ---
+        function setAvatarStatus(text, emoji) {
+            $('avatarStatus').textContent = emoji + ' ' + text;
+            const face = $('avatarFace');
+            face.className = 'avatar-face';
+            if (text === 'Thinking...') {
+                face.classList.add('thinking');
+            } else if (text === 'Got it!' || text === 'I win!' || text === 'Good move!') {
+                face.classList.add('happy');
+                setTimeout(() => face.classList.remove('happy'), 600);
+            } else if (text === 'Wrong!' || text === 'You win!') {
+                face.classList.add('sad');
+                setTimeout(() => face.classList.remove('sad'), 600);
+            }
+        }
+
+        // --- HANDLE CELL CLICK ---
+        function cellClick(index) {
+            if (!gameState.gameActive) return;
+            if (gameState.currentPlayer !== 'you') return;
+            if (gameState.isWaitingForAvatar) return;
+            if (gameState.board[index] !== null) return;
+            if (gameState.gameWinner) return;
+            if (gameState.seriesFinished) return;
+            if (gameState.isTransitioning) return;
+
+            gameState.selectedCell = index;
+            gameState.questionActive = true;
+            showQuestion();
+        }
+
+        // --- SHOW QUESTION ---
+        function showQuestion() {
+            const available = ALL_TERMS.filter((_, i) => !gameState.calledTerms.includes(i));
+            if (available.length === 0) {
+                gameState.calledTerms = [];
+                const newAvailable = ALL_TERMS.filter((_, i) => !gameState.calledTerms.includes(i));
+                showQuestionForReal(newAvailable);
+                return;
+            }
+            showQuestionForReal(available);
+        }
+
+        function showQuestionForReal(available) {
+            const idx = Math.floor(Math.random() * available.length);
+            const termIndex = ALL_TERMS.indexOf(available[idx]);
+            const term = ALL_TERMS[termIndex];
+            gameState.currentTerm = term;
+            gameState.currentQuestion = termIndex;
+            gameState.calledTerms.push(termIndex);
+            $('calledDisplay').textContent = gameState.calledTerms.length;
+
+            const wrongTerms = ALL_TERMS.filter((_, i) => i !== termIndex);
+            const shuffledWrong = shuffleArray([...wrongTerms]);
+            const options = [term.definition];
+            const wrongOptions = shuffledWrong.slice(0, 3).map(t => t.definition);
+            while (wrongOptions.length < 3) {
+                wrongOptions.push("A different definition");
+            }
+            options.push(...wrongOptions);
+            const shuffledOptions = shuffleArray([...options]);
+            const correctIndex = shuffledOptions.indexOf(term.definition);
+
+            $('questionText').innerHTML = `📌 What is the definition of <span class="highlight">${term.term}</span>?`;
+            $('questionExample').textContent = term.example || '';
+            $('feedbackText').textContent = 'Select the correct definition!';
+            $('feedbackText').className = 'info-fb';
+            $('optionsArea').style.display = 'grid';
+
+            const optContainer = $('optionsArea');
+            optContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            shuffledOptions.forEach((text, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.dataset.index = index;
+                btn.textContent = `${letters[index]}. ${text}`;
+                btn.onclick = () => handleAnswer(btn, index, correctIndex);
+                optContainer.appendChild(btn);
+            });
+
+            document.querySelectorAll('.opt-btn').forEach(b => b.disabled = false);
+            setAvatarStatus('Watching...', '👀');
+        }
+
+        // --- HANDLE ANSWER ---
+        function handleAnswer(btn, selectedIndex, correctIndex) {
+            if (!gameState.questionActive) return;
+            if (gameState.isWaitingForAvatar) return;
+            if (gameState.isTransitioning) return;
+
+            const allBtns = document.querySelectorAll('.opt-btn');
+            allBtns.forEach(b => b.disabled = true);
+            gameState.questionActive = false;
+
+            const isCorrect = (selectedIndex === correctIndex);
+            const index = gameState.selectedCell;
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                gameState.board[index] = 'X';
+                const cell = document.querySelector(`.cell[data-index="${index}"]`);
+                cell.textContent = '✕';
+                cell.className = 'cell taken x';
+                cell.dataset.mark = 'X';
+                
+                $('feedbackText').textContent = '✅ Correct! You placed your mark!';
+                $('feedbackText').className = 'correct-fb';
+                setAvatarStatus('Good move!', '😊');
+
+                if (checkWin('X')) {
+                    gameState.gameWinner = 'you';
+                    gameState.gameActive = false;
+                    gameState.gameFinished = true;
+                    highlightWinningCells('X');
+                    $('feedbackText').textContent = '🎉 You won the game!';
+                    $('feedbackText').className = 'win-fb';
+                    setAvatarStatus('You win!', '😮');
+                    setTimeout(() => endGame('you'), 800);
+                    return;
+                } else if (checkDraw()) {
+                    gameState.gameWinner = 'draw';
+                    gameState.gameActive = false;
+                    gameState.gameFinished = true;
+                    $('feedbackText').textContent = '🤝 It\'s a draw!';
+                    $('feedbackText').className = 'info-fb';
+                    setAvatarStatus('Draw!', '🤝');
+                    setTimeout(() => endGame('draw'), 800);
+                    return;
+                }
+
+                gameState.currentPlayer = 'avatar';
+                gameState.isWaitingForAvatar = true;
+                $('gameStatus').innerHTML = `🎯 <span class="highlight">Game ${gameState.game} of 3</span> — Avatar's turn...`;
+                $('feedbackText').textContent = '🤖 Avatar is thinking...';
+                $('feedbackText').className = 'info-fb';
+                setAvatarStatus('Thinking...', '🤔');
+
+                setTimeout(() => {
+                    avatarTurn();
+                }, 1200);
+
+            } else {
+                btn.classList.add('wrong');
+                allBtns.forEach(b => {
+                    if (parseInt(b.dataset.index) === correctIndex) {
+                        b.classList.add('correct');
+                    }
+                });
+                $('feedbackText').textContent = '❌ Wrong! The answer was: ' + gameState.currentTerm.definition;
+                $('feedbackText').className = 'wrong-fb';
+                setAvatarStatus('Got it!', '😊');
+
+                setTimeout(() => {
+                    gameState.board[index] = 'O';
+                    const cell = document.querySelector(`.cell[data-index="${index}"]`);
+                    cell.textContent = '◯';
+                    cell.className = 'cell taken o';
+                    cell.dataset.mark = 'O';
+                    
+                    $('feedbackText').textContent = '🤖 Avatar takes the square!';
+                    $('feedbackText').className = 'wrong-fb';
+                    
+                    if (checkWin('O')) {
+                        gameState.gameWinner = 'avatar';
+                        gameState.gameActive = false;
+                        gameState.gameFinished = true;
+                        highlightWinningCells('O');
+                        $('feedbackText').textContent = '🤖 Avatar won the game!';
+                        $('feedbackText').className = 'wrong-fb';
+                        setAvatarStatus('I win!', '😎');
+                        setTimeout(() => endGame('avatar'), 800);
+                        return;
+                    } else if (checkDraw()) {
+                        gameState.gameWinner = 'draw';
+                        gameState.gameActive = false;
+                        gameState.gameFinished = true;
+                        $('feedbackText').textContent = '🤝 It\'s a draw!';
+                        $('feedbackText').className = 'info-fb';
+                        setAvatarStatus('Draw!', '🤝');
+                        setTimeout(() => endGame('draw'), 800);
+                        return;
+                    }
+                    
+                    gameState.currentPlayer = 'you';
+                    gameState.isWaitingForAvatar = false;
+                    $('gameStatus').innerHTML = `🎯 <span class="highlight">Game ${gameState.game} of 3</span> — Your turn!`;
+                    $('feedbackText').textContent = 'Your turn! Click a square.';
+                    $('feedbackText').className = 'info-fb';
+                    setAvatarStatus('Your turn!', '🤖');
+                    $('optionsArea').style.display = 'none';
+                }, 1500);
+            }
+        }
+
+        // --- AVATAR TURN ---
+        function avatarTurn() {
+            if (!gameState.gameActive) {
+                gameState.isWaitingForAvatar = false;
+                return;
+            }
+
+            const available = gameState.board.map((val, idx) => val === null ? idx : null).filter(v => v !== null);
+            if (available.length === 0) {
+                gameState.isWaitingForAvatar = false;
+                return;
+            }
+
+            let move = null;
+            
+            for (let i of available) {
+                gameState.board[i] = 'O';
+                if (checkWin('O')) {
+                    move = i;
+                    gameState.board[i] = null;
+                    break;
+                }
+                gameState.board[i] = null;
+            }
+            
+            if (move === null) {
+                for (let i of available) {
+                    gameState.board[i] = 'X';
+                    if (checkWin('X')) {
+                        move = i;
+                        gameState.board[i] = null;
+                        break;
+                    }
+                    gameState.board[i] = null;
+                }
+            }
+            
+            if (move === null && gameState.board[4] === null) {
+                move = 4;
+            }
+            
+            if (move === null) {
+                const randomIndex = Math.floor(Math.random() * available.length);
+                move = available[randomIndex];
+            }
+
+            gameState.board[move] = 'O';
+            const cell = document.querySelector(`.cell[data-index="${move}"]`);
+            cell.textContent = '◯';
+            cell.className = 'cell taken o';
+            cell.dataset.mark = 'O';
+
+            if (checkWin('O')) {
+                gameState.gameWinner = 'avatar';
+                gameState.gameActive = false;
+                gameState.gameFinished = true;
+                highlightWinningCells('O');
+                $('feedbackText').textContent = '🤖 Avatar won the game!';
+                $('feedbackText').className = 'wrong-fb';
+                setAvatarStatus('I win!', '😎');
+                gameState.isWaitingForAvatar = false;
+                setTimeout(() => endGame('avatar'), 800);
+                return;
+            } else if (checkDraw()) {
+                gameState.gameWinner = 'draw';
+                gameState.gameActive = false;
+                gameState.gameFinished = true;
+                $('feedbackText').textContent = '🤝 It\'s a draw!';
+                $('feedbackText').className = 'info-fb';
+                setAvatarStatus('Draw!', '🤝');
+                gameState.isWaitingForAvatar = false;
+                setTimeout(() => endGame('draw'), 800);
+                return;
+            }
+
+            gameState.currentPlayer = 'you';
+            gameState.isWaitingForAvatar = false;
+            $('gameStatus').innerHTML = `🎯 <span class="highlight">Game ${gameState.game} of 3</span> — Your turn!`;
+            $('feedbackText').textContent = 'Your turn! Click a square.';
+            $('feedbackText').className = 'info-fb';
+            setAvatarStatus('Your turn!', '🤖');
+            $('optionsArea').style.display = 'none';
+        }
+
+        // --- CHECK WIN ---
+        function checkWin(player) {
+            const winPatterns = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            return winPatterns.some(pattern => {
+                return pattern.every(index => gameState.board[index] === player);
+            });
+        }
+
+        // --- CHECK DRAW ---
+        function checkDraw() {
+            return gameState.board.every(cell => cell !== null);
+        }
+
+        // --- HIGHLIGHT WINNING CELLS ---
+        function highlightWinningCells(player) {
+            const winPatterns = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            for (let pattern of winPatterns) {
+                if (pattern.every(index => gameState.board[index] === player)) {
+                    pattern.forEach(index => {
+                        const cell = document.querySelector(`.cell[data-index="${index}"]`);
+                        cell.classList.add('winning');
+                    });
+                    break;
+                }
+            }
+        }
+
+        // --- END GAME ---
+        function endGame(winner) {
+            // Don't count draws in the series score
+            if (winner === 'you') {
+                gameState.youScore++;
+                $('youScoreDisplay').textContent = gameState.youScore;
+            } else if (winner === 'avatar') {
+                gameState.avatarScore++;
+                $('avatarScoreDisplay').textContent = gameState.avatarScore;
+            } else if (winner === 'draw') {
+                gameState.drawCount++;
+                // Draws don't add to either score
+            }
+            
+            // Check if series is over (after 3 games)
+            if (gameState.game >= 3) {
+                gameState.seriesFinished = true;
+                gameState.gameActive = false;
+                // Determine winner based on scores (draws don't count)
+                const seriesWinner = gameState.youScore > gameState.avatarScore ? 'you' : 
+                                    gameState.avatarScore > gameState.youScore ? 'avatar' : 'draw';
+                setTimeout(() => showSeriesWinner(seriesWinner), 1000);
+                return;
+            }
+            
+            // --- AUTO-START NEXT GAME after a delay ---
+            gameState.isTransitioning = true;
+            $('gameStatus').innerHTML = `🎯 <span class="highlight">Game ${gameState.game} of 3</span> — Complete!`;
+            $('feedbackText').textContent = 'Next game starting...';
+            $('feedbackText').className = 'info-fb';
+            setAvatarStatus('Next game...', '⏳');
+            gameState.gameActive = false;
+            
+            setTimeout(() => {
+                gameState.game++;
+                $('gameDisplay').textContent = gameState.game;
+                // Same avatar - no change
+                setAvatarStatus('New game!', '🎯');
+                resetGame();
+                $('gameStatus').innerHTML = `🎯 <span class="highlight">Game ${gameState.game} of 3</span> — Your turn!`;
+                $('feedbackText').textContent = 'Game ' + gameState.game + ' has started! Click a square.';
+                $('feedbackText').className = 'info-fb';
+                gameState.isTransitioning = false;
+            }, 2000);
+        }
+
+        // --- SHOW SERIES WINNER ---
+        function showSeriesWinner(winner) {
+            const overlay = $('gameoverOverlay');
+            overlay.style.display = 'flex';
+            void overlay.offsetWidth;
+            overlay.classList.add('active');
+
+            const youWins = gameState.youScore;
+            const avatarWins = gameState.avatarScore;
+            const draws = gameState.drawCount;
+
+            if (winner === 'you') {
+                $('resultIcon').textContent = '🏆';
+                $('resultTitle').textContent = 'You Win the Series!';
+                $('resultTitle').style.color = '#5adc8c';
+                if (youWins === 2 && avatarWins === 0) {
+                    $('resultSubtitle').textContent = `You won 2-0! A clean sweep! Amazing!`;
+                } else if (youWins === 2 && avatarWins === 1) {
+                    $('resultSubtitle').textContent = `You won 2-1! Close match! Well played!`;
+                } else {
+                    $('resultSubtitle').textContent = `You won ${youWins}-${avatarWins}! Well played!`;
+                }
+            } else if (winner === 'avatar') {
+                $('resultIcon').textContent = '😅';
+                $('resultTitle').textContent = 'Avatar Wins the Series!';
+                $('resultTitle').style.color = '#ff6b6b';
+                if (avatarWins === 2 && youWins === 0) {
+                    $('resultSubtitle').textContent = `Avatar won 2-0! A clean sweep! Better luck next time!`;
+                } else if (avatarWins === 2 && youWins === 1) {
+                    $('resultSubtitle').textContent = `Avatar won 2-1! So close! Better luck next time!`;
+                } else {
+                    $('resultSubtitle').textContent = `Avatar won ${avatarWins}-${youWins}. Better luck next time!`;
+                }
+            } else {
+                // Draw series - all games were draws
+                $('resultIcon').textContent = '🤝';
+                $('resultTitle').textContent = 'It\'s a Draw!';
+                $('resultTitle').style.color = '#f5d77b';
+                $('resultSubtitle').textContent = `All ${gameState.game} games were draws!`;
+            }
+
+            $('finalYouScore').textContent = youWins;
+            $('finalAvatarScore').textContent = avatarWins;
+            $('finalRounds').textContent = gameState.game;
+        }
+
+        // --- RESET FULL GAME ---
+        function resetFullGame() {
+            document.getElementById('gameoverOverlay').style.display = 'none';
+            document.getElementById('gameoverOverlay').classList.remove('active');
+            initGame();
+        }
+
+        // --- EVENT LISTENERS ---
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const index = parseInt(this.dataset.index);
+                cellClick(index);
+            });
+        });
+
+        // --- START ---
+        initGame();
+    </script>
+</body>
+</html>

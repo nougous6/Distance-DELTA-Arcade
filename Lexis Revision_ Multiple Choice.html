@@ -1,0 +1,1097 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Distance DELTA Quiz Challenge</title>
+    <style>
+        /* --- Branded Design System --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a1628;
+            color: #e8f0fe;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a3a6a, #0a1628 80%),
+                radial-gradient(circle at 80% 70%, #1a2a4a, transparent 60%);
+        }
+        .game-container {
+            max-width: 820px;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* --- Header with Logo --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.15);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.1;
+        }
+        .logo .distance {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #8a9bb5;
+            text-transform: uppercase;
+        }
+        .logo .delta {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #d4af37, #f5d77b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            margin-top: -4px;
+        }
+        .logo-divider {
+            width: 3px;
+            height: 45px;
+            background: linear-gradient(to bottom, #d4af37, transparent);
+            opacity: 0.3;
+        }
+        .header h1 {
+            font-weight: 500;
+            font-size: 1.3rem;
+            color: #b0c4e8;
+            letter-spacing: -0.3px;
+        }
+        .header .sub {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            font-weight: 400;
+            color: #8a9bb5;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* --- Stats Bar --- */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 20px;
+            border-radius: 60px;
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            margin-bottom: 20px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .stat-item .icon {
+            font-size: 1.2rem;
+        }
+        .stat-item .value {
+            font-weight: 700;
+            color: #f5d77b;
+            font-size: 1.1rem;
+            min-width: 30px;
+        }
+        .stat-item .label {
+            opacity: 0.6;
+            font-weight: 400;
+        }
+
+        /* --- Progress --- */
+        .progress-wrap {
+            background: rgba(255, 255, 255, 0.05);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #d4af37, #f5d77b);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        /* --- Question Area --- */
+        .question-area {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            border-radius: 24px;
+            padding: 30px 25px 25px;
+            margin-bottom: 20px;
+            min-height: 160px;
+        }
+        .question-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.4;
+            margin-bottom: 12px;
+        }
+        .question-text {
+            font-size: 1.6rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #d0dfff;
+            margin-bottom: 8px;
+        }
+        .question-hint {
+            font-size: 0.95rem;
+            opacity: 0.5;
+            font-style: italic;
+        }
+        .topic-tag {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.12);
+            color: #f5d77b;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* --- Options --- */
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 16px 18px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #d0dfff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option-btn .letter {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #8a9bb5;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        .option-btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.06);
+            border-color: rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .option-btn.correct {
+            background: rgba(90, 220, 140, 0.12);
+            border-color: #5adc8c;
+            color: #b0ffd0;
+        }
+        .option-btn.correct .letter {
+            background: rgba(90, 220, 140, 0.2);
+            color: #5adc8c;
+        }
+        .option-btn.wrong {
+            background: rgba(255, 80, 80, 0.12);
+            border-color: #ff6b6b;
+            color: #ffb0b0;
+        }
+        .option-btn.wrong .letter {
+            background: rgba(255, 80, 80, 0.2);
+            color: #ff6b6b;
+        }
+        .option-btn.show-correct {
+            border-color: rgba(90, 220, 140, 0.4);
+            background: rgba(90, 220, 140, 0.05);
+        }
+
+        /* --- Feedback --- */
+        .feedback {
+            text-align: center;
+            min-height: 36px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .feedback .correct-fb {
+            color: #5adc8c;
+        }
+        .feedback .wrong-fb {
+            color: #ff6b6b;
+        }
+
+        /* --- Bottom Controls --- */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(212, 175, 55, 0.06);
+        }
+        .btn {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #f5d77b;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+        }
+        .btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.18);
+            transform: scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.1);
+        }
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37, #b8962e);
+            border: none;
+            color: #0a1628;
+            font-weight: 700;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e5c44a, #c4a030);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #b0c4e8;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- Streak Indicator --- */
+        .streak-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.1rem;
+        }
+        .streak-indicator .streak-fire {
+            font-size: 1.4rem;
+        }
+
+        /* --- Overlay (Modal) --- */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: linear-gradient(145deg, #0f2240, #0a1628);
+            padding: 40px 50px;
+            border-radius: 40px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.05);
+        }
+        .modal .medal {
+            font-size: 72px;
+            line-height: 1.2;
+        }
+        .modal h2 {
+            font-size: 2rem;
+            margin: 10px 0 5px;
+            font-weight: 600;
+            color: #f5d77b;
+        }
+        .modal .subtitle {
+            opacity: 0.6;
+            margin-bottom: 20px;
+            color: #b0c4e8;
+        }
+        .modal .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0 25px;
+        }
+        .modal .stat-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 14px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .modal .stat-box .num {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f5d77b;
+            display: block;
+        }
+        .modal .stat-box .lbl {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .modal .btn {
+            padding: 12px 40px;
+            font-size: 1rem;
+        }
+
+        /* --- Animations --- */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse {
+            animation: pulse 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-up {
+            animation: slideUp 0.4s ease;
+        }
+
+        /* --- Responsive --- */
+        @media(max-width: 700px) {
+            .game-container {
+                padding: 20px;
+                border-radius: 28px;
+            }
+            .brand {
+                flex-wrap: wrap;
+            }
+            .logo .distance {
+                font-size: 1rem;
+            }
+            .logo .delta {
+                font-size: 1.8rem;
+            }
+            .header h1 {
+                font-size: 1rem;
+            }
+            .stats-bar {
+                padding: 8px 14px;
+                gap: 8px;
+                font-size: 0.85rem;
+            }
+            .stat-item .value {
+                font-size: 0.95rem;
+            }
+            .question-text {
+                font-size: 1.2rem;
+            }
+            .options {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .option-btn {
+                padding: 12px 14px;
+                font-size: 0.9rem;
+            }
+            .modal {
+                padding: 30px 20px;
+            }
+            .modal .stats-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 8px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .controls .btn {
+                text-align: center;
+            }
+        }
+        @media(max-width: 420px) {
+            .stats-bar {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .stat-item {
+                font-size: 0.75rem;
+            }
+            .modal .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- Header with Distance DELTA Branding -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo">
+                    <span class="distance">The</span>
+                    <span class="distance" style="font-size:1rem;letter-spacing:6px;margin-top:-2px;">Distance</span>
+                    <span class="delta">DELTA</span>
+                </div>
+                <div class="logo-divider"></div>
+                <div>
+                    <h1>Quiz Challenge</h1>
+                    <span class="sub">Lexis &amp; Vocabulary • 23 Questions</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="icon">⭐</span>
+                <span class="label">Score:</span>
+                <span class="value" id="scoreDisplay">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">✅</span>
+                <span class="label">Correct:</span>
+                <span class="value" id="correctDisplay">0</span>
+                <span class="label">/</span>
+                <span id="totalDisplay">23</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">🔥</span>
+                <span class="label">Streak:</span>
+                <span class="value" id="streakDisplay">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">🎯</span>
+                <span class="label">Level:</span>
+                <span class="value" id="levelDisplay">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">⏱️</span>
+                <span class="label">Time:</span>
+                <span class="value" id="timerDisplay">140</span>
+                <span class="label">s</span>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Question Area -->
+        <div class="question-area" id="questionArea">
+            <div class="question-number" id="questionNumber">Question 1 of 23</div>
+            <div class="question-text" id="questionText">What is the definition of <strong>polysemy</strong>?</div>
+            <div class="question-hint" id="questionHint">Select the correct option below</div>
+            <span class="topic-tag" id="topicTag">Lexis &amp; Vocabulary</span>
+        </div>
+
+        <!-- Options -->
+        <div class="options" id="optionsContainer">
+            <button class="option-btn" data-index="0">
+                <span class="letter">A</span>
+                <span class="text">Words that sound the same but have different meanings</span>
+            </button>
+            <button class="option-btn" data-index="1">
+                <span class="letter">B</span>
+                <span class="text">A single word with multiple related meanings</span>
+            </button>
+            <button class="option-btn" data-index="2">
+                <span class="letter">C</span>
+                <span class="text">Words that look similar in two languages</span>
+            </button>
+            <button class="option-btn" data-index="3">
+                <span class="letter">D</span>
+                <span class="text">The opposite meaning of a word</span>
+            </button>
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedback">
+            <span id="feedbackText">Select an option to begin</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-secondary" onclick="resetGame()">🔄 New Game</button>
+            <div class="streak-indicator">
+                <span class="streak-fire" id="streakFire">🔥</span>
+                <span id="streakLabel">Keep going!</span>
+            </div>
+            <button class="btn btn-primary" id="nextBtn" disabled onclick="nextQuestion()">Next Question →</button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay">
+        <div class="modal slide-up">
+            <div class="medal" id="medal">🥇</div>
+            <h2 id="modalTitle">Perfect Score!</h2>
+            <p class="subtitle" id="modalSubtitle">You've mastered the terminology!</p>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="num" id="finalScore">0</span>
+                    <span class="lbl">Score</span>
+                </div>
+                <div class="stat-box">
+                    <span class="num" id="finalCorrect">0/23</span>
+                    <span class="lbl">Correct</span>
+                </div>
+                <div class="stat-box">
+                    <span class="num" id="finalLevel">1</span>
+                    <span class="lbl">Level</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="document.getElementById('overlay').style.display='none'; resetGame();">🔄 Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: 23 Lexis & Vocabulary Questions ---
+        const QUESTIONS = [{
+            term: "Cognates",
+            definition: "Words that look and mean the same in two languages due to shared etymology.",
+            example: "\"animal\" in English and Spanish – same spelling and meaning.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "Words that look and mean the same in two languages",
+                "Words that sound the same but have different meanings",
+                "Words that are spelled the same but pronounced differently",
+                "Words that have opposite meanings in two languages"
+            ],
+            correct: 0
+        }, {
+            term: "False Cognates",
+            definition: "Words that look similar in two languages but have different meanings, often leading to learner confusion.",
+            example: "English \"actually\" vs. Spanish \"actualmente\" (which means \"currently\") – similar form, different meaning.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "Words that are identical in meaning across languages",
+                "Words that look similar but have different meanings in two languages",
+                "Words that are pronounced the same in two languages",
+                "Words that are borrowed directly from another language"
+            ],
+            correct: 1
+        }, {
+            term: "Colligation",
+            definition: "The grammatical patterns that words commonly follow, including the syntactic structures they occur in.",
+            example: "\"depend\" is followed by \"on\" (e.g., \"It depends on the weather\") – the grammatical pattern is part of its colligation.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "The tendency of words to co-occur regularly",
+                "The grammatical patterns words commonly follow",
+                "The emotional associations of a word",
+                "The literal meaning of a word"
+            ],
+            correct: 1
+        }, {
+            term: "Synonymy",
+            definition: "Words with similar or identical meanings, though they often differ in register, collocation, or connotation.",
+            example: "\"big\" and \"large\" – similar in meaning but often differ in register or collocation (e.g., \"big deal\" not \"large deal\").",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "Words with opposite meanings",
+                "Words with similar or identical meanings",
+                "Words that are spelled the same",
+                "Words that sound the same"
+            ],
+            correct: 1
+        }, {
+            term: "Antonymy",
+            definition: "Words with opposite meanings, which can be gradable, complementary, or relational.",
+            example: "\"hot/cold\" (gradable – can be very hot, slightly cold) or \"alive/dead\" (complementary – either one or the other).",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "Words with identical meanings",
+                "Words with opposite meanings",
+                "Words that are used in formal contexts",
+                "Words that are borrowed from other languages"
+            ],
+            correct: 1
+        }, {
+            term: "Hyponymy",
+            definition: "A hierarchical relationship where one word is a specific instance of a more general category.",
+            example: "\"dog\" is a hyponym of \"animal\"; \"animal\" is a superordinate of \"dog\" – the relationship of specific to general.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A hierarchical relationship where one word is a specific instance of a more general category",
+                "Words with similar or identical meanings",
+                "Words that are used in informal contexts",
+                "The tendency of words to co-occur regularly"
+            ],
+            correct: 0
+        }, {
+            term: "Collocation",
+            definition: "The tendency of words to co-occur regularly in predictable combinations.",
+            example: "\"make a mistake\" (not \"do a mistake\") – a strong collocation where one word typically pairs with another.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "The grammatical patterns words commonly follow",
+                "The tendency of words to co-occur regularly",
+                "Words with opposite meanings",
+                "The emotional associations of a word"
+            ],
+            correct: 1
+        }, {
+            term: "Idiom",
+            definition: "A fixed expression whose meaning cannot be deduced from the sum of its component parts.",
+            example: "\"kick the bucket\" – meaning \"die,\" not literally kicking a bucket.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A fixed expression whose meaning is literal",
+                "A fixed expression whose meaning cannot be deduced from its parts",
+                "A word that changes class without changing form",
+                "A group of words related in meaning"
+            ],
+            correct: 1
+        }, {
+            term: "Euphemism",
+            definition: "A mild or indirect word substituted for one considered too harsh, blunt, or offensive.",
+            example: "\"passed away\" instead of \"died\" – a gentler way to refer to death.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A direct and blunt word",
+                "A mild or indirect word substituted for a harsh one",
+                "A word with multiple related meanings",
+                "A word that sounds the same as another"
+            ],
+            correct: 1
+        }, {
+            term: "Polysemy",
+            definition: "A single lexical item having multiple related senses, where the various meanings share a common underlying conceptual core.",
+            example: "\"head\" – the physical body part, the leader of an organisation, and the top of an object – all relate to the notion of \"topmost\" or \"primary position.\"",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A single word with multiple unrelated meanings",
+                "A single word with multiple related meanings",
+                "Words that sound the same but have different spellings",
+                "Words that are spelled the same but pronounced differently"
+            ],
+            correct: 1
+        }, {
+            term: "Homonymy",
+            definition: "Words that share the same spelling or pronunciation but have unrelated meanings, with no conceptual connection between them.",
+            example: "\"bat\" (the flying mammal) and \"bat\" (the sports equipment) – unrelated meanings, same form.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "Words that share the same spelling or pronunciation but have unrelated meanings",
+                "Words with similar or identical meanings",
+                "Words that look and mean the same in two languages",
+                "A single word with multiple related meanings"
+            ],
+            correct: 0
+        }, {
+            term: "Homophones",
+            definition: "Words that sound the same but have different spellings and unrelated meanings.",
+            example: "\"two\"/\"to\"/\"too\" – identical pronunciation but different spelling and meaning.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "Words that are spelled the same but pronounced differently",
+                "Words that sound the same but have different spellings and meanings",
+                "Words that look and mean the same in two languages",
+                "Words with opposite meanings"
+            ],
+            correct: 1
+        }, {
+            term: "Homographs",
+            definition: "Words that are spelled the same but have different meanings and pronunciation.",
+            example: "\"lead\" (the metal /led/) vs. \"lead\" (to guide /liːd/) – same spelling, different pronunciation and meaning.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "Words that sound the same but have different spellings",
+                "Words that are spelled the same but have different meanings and pronunciation",
+                "Words that look and mean the same in two languages",
+                "Words with similar or identical meanings"
+            ],
+            correct: 1
+        }, {
+            term: "Register",
+            definition: "The level of formality in language use, determined by context, audience, and relationship between participants.",
+            example: "Formal: \"I apologise for the inconvenience\" vs. Informal: \"Sorry about that\" – both convey apology but differ in register.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "The level of formality in language use",
+                "The emotional associations of a word",
+                "The literal meaning of a word",
+                "The grammatical patterns words commonly follow"
+            ],
+            correct: 0
+        }, {
+            term: "Denotation",
+            definition: "The literal, dictionary definition of a word, independent of emotional or cultural associations.",
+            example: "The denotation of \"home\" is \"a place where someone lives\" – the literal meaning, stripped of emotional associations.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "The emotional associations of a word",
+                "The literal, dictionary definition of a word",
+                "The level of formality in language use",
+                "The cultural meaning of a word"
+            ],
+            correct: 1
+        }, {
+            term: "Connotation",
+            definition: "The emotional, cultural, or associative meanings attached to a word beyond its literal denotation.",
+            example: "\"home\" – connotations include warmth, safety, family, and comfort (beyond the literal denotation of \"a place where someone lives\").",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "The literal, dictionary definition of a word",
+                "The emotional, cultural, or associative meanings of a word",
+                "The level of formality in language use",
+                "The grammatical patterns words commonly follow"
+            ],
+            correct: 1
+        }, {
+            term: "Appropriacy",
+            definition: "The suitability of language for a particular context, taking into account factors such as formality, relationship, setting, and cultural norms.",
+            example: "Using \"Could you possibly pass the salt?\" at a formal dinner (appropriate) vs. \"Gimme the salt\" (inappropriate in formal context) – both convey the same meaning but differ in appropriacy.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "The emotional associations of a word",
+                "The literal meaning of a word",
+                "The suitability of language for a particular context",
+                "The grammatical patterns words commonly follow"
+            ],
+            correct: 2
+        }, {
+            term: "Lexical Chunk",
+            definition: "A commonly used group of words that are often stored and retrieved as a single unit.",
+            example: "\"by the way,\" \"on the other hand,\" \"I don't know\" – multi-word units frequently used in natural speech.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A single word with multiple meanings",
+                "A commonly used group of words stored as a single unit",
+                "A group of words related in meaning",
+                "The grammatical patterns words commonly follow"
+            ],
+            correct: 1
+        }, {
+            term: "Lexical Sets",
+            definition: "Groups of words that belong to the same category or theme, often taught together.",
+            example: "colours: red, blue, green; or transport: car, bus, train – related words grouped by topic.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A commonly used group of words stored as a single unit",
+                "Groups of words related in meaning within a specific area",
+                "Groups of words that belong to the same category or theme",
+                "The tendency of words to co-occur regularly"
+            ],
+            correct: 2
+        }, {
+            term: "Semantic Field",
+            definition: "A group of words related in meaning that cover a particular area of experience or knowledge.",
+            example: "the semantic field of \"hospital\" includes doctor, nurse, patient, ward, surgery, treatment – all related to the hospital context.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A group of words related in meaning that cover a particular area",
+                "A commonly used group of words stored as a single unit",
+                "Words that belong to the same grammatical category",
+                "The emotional associations of a word"
+            ],
+            correct: 0
+        }, {
+            term: "Word Class",
+            definition: "The grammatical category that a word belongs to, based on its function and form.",
+            example: "nouns (e.g., \"dog\"), verbs (e.g., \"run\"), adjectives (e.g., \"happy\"), adverbs (e.g., \"quickly\"), etc.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "The emotional associations of a word",
+                "The grammatical category a word belongs to",
+                "A group of words related in meaning",
+                "The literal, dictionary definition of a word"
+            ],
+            correct: 1
+        }, {
+            term: "Word Family",
+            definition: "A base word and all its related forms, including derivatives with prefixes and suffixes.",
+            example: "\"happy,\" \"happiness,\" \"unhappy,\" \"happily,\" \"unhappiness\" – all derived from the base \"happy.\"",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "A group of words related in meaning",
+                "A base word and all its related forms",
+                "The grammatical category a word belongs to",
+                "Words that belong to the same category"
+            ],
+            correct: 1
+        }, {
+            term: "Zero Affixation (Conversion)",
+            definition: "When a word changes grammatical class without any change in form (adding no affix).",
+            example: "\"text\" as a noun (\"I sent a text\") and as a verb (\"I'll text you\") – the form remains unchanged but the word class changes.",
+            topic: "Lexis & Vocabulary",
+            options: [
+                "When a word changes class without changing form",
+                "When a word is formed by adding a prefix",
+                "When a word is formed by adding a suffix",
+                "When a word is borrowed from another language"
+            ],
+            correct: 0
+        }];
+
+        // --- STATE ---
+        let currentQuestion = 0;
+        let score = 0;
+        let correctCount = 0;
+        let streak = 0;
+        let level = 1;
+        let timeLeft = 140;
+        let timer = null;
+        let isAnswered = false;
+        let gameOver = false;
+
+        const $ = id => document.getElementById(id);
+
+        // --- SHUFFLE FUNCTION ---
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // --- INITIALISE ---
+        let shuffledQuestions = [];
+
+        function initGame() {
+            shuffledQuestions = shuffleArray([...QUESTIONS]);
+            currentQuestion = 0;
+            score = 0;
+            correctCount = 0;
+            streak = 0;
+            level = 1;
+            timeLeft = 140;
+            gameOver = false;
+            isAnswered = false;
+            $('scoreDisplay').textContent = '0';
+            $('correctDisplay').textContent = '0';
+            $('streakDisplay').textContent = '0';
+            $('levelDisplay').textContent = '1';
+            $('timerDisplay').textContent = '140';
+            $('progressBar').style.width = '0%';
+            $('nextBtn').disabled = true;
+            $('feedbackText').textContent = 'Select an option to begin';
+            $('feedbackText').className = '';
+            document.getElementById('overlay').style.display = 'none';
+            
+            if (timer) clearInterval(timer);
+            startTimer();
+            showQuestion();
+        }
+
+        // --- TIMER ---
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                $('timerDisplay').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    endGame('⏰', "Time's Up!", "You ran out of time! Keep practising!");
+                }
+            }, 1000);
+        }
+
+        // --- SHOW QUESTION ---
+        function showQuestion() {
+            if (currentQuestion >= shuffledQuestions.length) {
+                endGame('🎉', "Amazing!", "You've completed all questions!");
+                return;
+            }
+
+            const q = shuffledQuestions[currentQuestion];
+            isAnswered = false;
+            $('nextBtn').disabled = true;
+
+            $('questionNumber').textContent = `Question ${currentQuestion + 1} of ${shuffledQuestions.length}`;
+            $('questionText').innerHTML = `What is the definition of <strong>${q.term}</strong>?`;
+            $('questionHint').textContent = 'Select the correct option below';
+            $('topicTag').textContent = q.topic;
+
+            // Shuffle options
+            const shuffledOptions = shuffleArray([...q.options]);
+            const correctIndex = shuffledOptions.indexOf(q.options[q.correct]);
+
+            // Build options
+            const container = $('optionsContainer');
+            container.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            shuffledOptions.forEach((text, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.dataset.index = index;
+                btn.dataset.correct = (index === correctIndex) ? 'true' : 'false';
+                btn.innerHTML = `
+                    <span class="letter">${letters[index]}</span>
+                    <span class="text">${text}</span>
+                `;
+                btn.onclick = () => handleAnswer(btn, index, correctIndex);
+                container.appendChild(btn);
+            });
+
+            // Reset feedback
+            $('feedbackText').textContent = 'Select an option to begin';
+            $('feedbackText').className = '';
+        }
+
+        // --- HANDLE ANSWER ---
+        function handleAnswer(btn, selectedIndex, correctIndex) {
+            if (isAnswered || gameOver) return;
+            isAnswered = true;
+
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.disabled = true);
+
+            const isCorrect = (selectedIndex === correctIndex);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                score += 10 + (streak * 2);
+                correctCount++;
+                streak++;
+                $('feedbackText').textContent = '✅ Correct! Well done!';
+                $('feedbackText').className = 'correct-fb';
+                
+                // Level up every 5 correct answers
+                if (correctCount % 5 === 0) {
+                    level++;
+                    $('levelDisplay').textContent = level;
+                    $('feedbackText').textContent = '🎯 Level Up! Amazing!';
+                }
+            } else {
+                btn.classList.add('wrong');
+                // Show correct answer
+                allBtns.forEach(b => {
+                    if (b.dataset.correct === 'true') {
+                        b.classList.add('correct');
+                    }
+                });
+                streak = 0;
+                $('feedbackText').textContent = '❌ Not quite. Keep learning!';
+                $('feedbackText').className = 'wrong-fb';
+            }
+
+            // Update stats
+            $('scoreDisplay').textContent = score;
+            $('correctDisplay').textContent = correctCount;
+            $('streakDisplay').textContent = streak;
+            $('progressBar').style.width = ((currentQuestion + 1) / shuffledQuestions.length * 100) + '%';
+
+            // Update streak indicator
+            updateStreak();
+
+            // Enable next button
+            $('nextBtn').disabled = false;
+        }
+
+        // --- UPDATE STREAK ---
+        function updateStreak() {
+            const fire = $('streakFire');
+            const label = $('streakLabel');
+            if (streak >= 5) {
+                fire.textContent = '🔥🔥🔥';
+                label.textContent = 'On fire!';
+            } else if (streak >= 3) {
+                fire.textContent = '🔥🔥';
+                label.textContent = 'Great streak!';
+            } else if (streak >= 1) {
+                fire.textContent = '🔥';
+                label.textContent = 'Keep going!';
+            } else {
+                fire.textContent = '💪';
+                label.textContent = 'Keep trying!';
+            }
+        }
+
+        // --- NEXT QUESTION ---
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        // --- END GAME ---
+        function endGame(medal, title, subtitle) {
+            gameOver = true;
+            if (timer) clearInterval(timer);
+            
+            $('medal').textContent = medal;
+            $('modalTitle').textContent = title;
+            $('modalSubtitle').textContent = subtitle;
+            $('finalScore').textContent = score;
+            $('finalCorrect').textContent = `${correctCount}/${shuffledQuestions.length}`;
+            $('finalLevel').textContent = level;
+            
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        // --- RESET GAME ---
+        function resetGame() {
+            if (timer) clearInterval(timer);
+            initGame();
+        }
+
+        // --- START ---
+        initGame();
+    </script>
+</body>
+</html>

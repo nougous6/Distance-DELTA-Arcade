@@ -1,0 +1,537 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Distance DELTA Revision Arcade</title>
+    <style>
+        /* --- Branded Design System --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a1628;
+            color: #e8f0fe;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a3a6a, #0a1628 80%),
+                radial-gradient(circle at 80% 70%, #1a2a4a, transparent 60%);
+        }
+        .game-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* --- Header with Logo --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.15);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.1;
+        }
+        .logo .distance {
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #8a9bb5;
+            text-transform: uppercase;
+        }
+        .logo .delta {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #d4af37, #f5d77b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            margin-top: -4px;
+        }
+        .logo-divider {
+            width: 3px;
+            height: 45px;
+            background: linear-gradient(to bottom, #d4af37, transparent);
+            opacity: 0.3;
+        }
+        .header h1 {
+            font-weight: 500;
+            font-size: 1.4rem;
+            color: #b0c4e8;
+            letter-spacing: -0.3px;
+        }
+        .header .sub {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            font-weight: 400;
+            color: #8a9bb5;
+            display: block;
+            margin-top: 2px;
+        }
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .stats span {
+            font-weight: 600;
+            color: #d4dfff;
+        }
+        .stats .label {
+            font-weight: 400;
+            opacity: 0.6;
+        }
+        .btn {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #f5d77b;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+        }
+        .btn:hover {
+            background: rgba(212, 175, 55, 0.18);
+            transform: scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.1);
+        }
+
+        /* --- Progress --- */
+        .progress-wrap {
+            background: rgba(255, 255, 255, 0.05);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0 15px;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #d4af37, #f5d77b);
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        #msg {
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0.8;
+            min-height: 28px;
+            margin-bottom: 20px;
+            color: #b0c4e8;
+        }
+        #msg .highlight {
+            color: #f5d77b;
+        }
+
+        /* --- Board (Categories) --- */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        .cat {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            border-radius: 20px;
+            padding: 15px 12px 12px;
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+        .cat:hover {
+            border-color: rgba(212, 175, 55, 0.15);
+        }
+        .cat h3 {
+            font-weight: 500;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            margin-bottom: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+            padding-bottom: 8px;
+            color: #d4dfff;
+        }
+        .drop {
+            min-height: 130px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        /* --- Cards (Terms) --- */
+        .terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            padding-top: 10px;
+            border-top: 1px solid rgba(212, 175, 55, 0.06);
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            padding: 12px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            color: #d0dfff;
+        }
+        .card:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(212, 175, 55, 0.08);
+            border-color: #d4af37;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.08);
+        }
+        .card:active {
+            cursor: grabbing;
+        }
+        .card.ok {
+            background: rgba(212, 175, 55, 0.12);
+            border-color: #d4af37;
+            color: #f5d77b;
+            cursor: default;
+            opacity: 0.8;
+            transform: scale(0.95);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.05);
+        }
+        .card.shake {
+            animation: shake 0.3s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-8px);
+            }
+            75% {
+                transform: translateX(8px);
+            }
+        }
+
+        /* --- Overlay (Modal) --- */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: linear-gradient(145deg, #0f2240, #0a1628);
+            padding: 40px 50px;
+            border-radius: 40px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.05);
+        }
+        .modal .medal {
+            font-size: 72px;
+            line-height: 1.2;
+        }
+        .modal h2 {
+            font-size: 2rem;
+            margin: 10px 0 5px;
+            font-weight: 600;
+            color: #f5d77b;
+        }
+        .modal p {
+            opacity: 0.7;
+            margin-bottom: 25px;
+            color: #b0c4e8;
+        }
+        .modal .btn {
+            background: linear-gradient(135deg, #d4af37, #b8962e);
+            border: none;
+            color: #0a1628;
+            padding: 12px 40px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .modal .btn:hover {
+            background: linear-gradient(135deg, #e5c44a, #c4a030);
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+        /* --- Responsive --- */
+        @media(max-width: 700px) {
+            .game-container {
+                padding: 20px;
+                border-radius: 28px;
+            }
+            .brand {
+                flex-wrap: wrap;
+            }
+            .logo .distance {
+                font-size: 1.1rem;
+            }
+            .logo .delta {
+                font-size: 1.8rem;
+            }
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            .stats {
+                padding: 6px 14px;
+                gap: 12px;
+                font-size: 0.9rem;
+            }
+            .modal {
+                padding: 30px 20px;
+            }
+        }
+        @media(max-width: 500px) {
+            .board {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .cat {
+                min-height: 100px;
+                padding: 10px 8px;
+            }
+            .card {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- Header with Distance DELTA Branding -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo">
+                    <span class="distance">The</span>
+                    <span class="distance" style="font-size:1.1rem;letter-spacing:6px;margin-top:-2px;">Distance</span>
+                    <span class="delta">DELTA</span>
+                </div>
+                <div class="logo-divider"></div>
+                <div>
+                    <h1>Revision Arcade</h1>
+                    <span class="sub">Phonology Classification • Drag &amp; Drop</span>
+                </div>
+            </div>
+            <div class="stats">
+                <span>❤️❤️❤️</span>
+                <span>Score: <span id="sc">0</span></span>
+                <span>⏱ <span id="tm">130</span>s</span>
+            </div>
+            <button class="btn" onclick="startGame()">↻ Replay</button>
+        </div>
+
+        <!-- Progress & Message -->
+        <div class="progress-wrap">
+            <div class="progress-bar" id="bar"></div>
+        </div>
+        <div id="msg">Drag each card into the <span class="highlight">correct category</span></div>
+
+        <!-- Board -->
+        <div class="board" id="board"></div>
+
+        <!-- Terms Pool -->
+        <div class="terms" id="terms"></div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay">
+        <div class="modal">
+            <div class="medal" id="medal">🥇</div>
+            <h2>Excellent!</h2>
+            <p id="stats"></p>
+            <button class="btn" onclick="document.getElementById('overlay').style.display='none'; startGame();">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: 5 terms in each category ---
+        const DATA = {
+            "Connected Speech": ["assimilation", "elision", "linking", "intrusion", "juncture"],
+            "Stress & Rhythm": ["weak forms", "prominence", "sentence stress", "rhythm", "word stress"],
+            "Intonation": ["tone unit", "fall-rise", "pitch", "nuclear stress", "onset"],
+            "Phonemes": ["schwa", "minimal pair", "diphthong", "voiced consonant", "monophthong"]
+        };
+
+        // --- STATE ---
+        let total = 0,
+            correct = 0,
+            score = 0,
+            timeLeft = 130,
+            timer;
+        const $ = id => document.getElementById(id);
+
+        // --- HELPERS ---
+        function shuffle(arr) {
+            return arr.sort(() => Math.random() - 0.5);
+        }
+
+        // --- MAIN GAME ---
+        function startGame() {
+            clearInterval(timer);
+            correct = 0;
+            score = 0;
+            timeLeft = 130;
+            $('sc').textContent = '0';
+            $('tm').textContent = '130';
+            $('bar').style.width = '0%';
+            $('msg').innerHTML = 'Drag each card into the <span class="highlight">correct category</span>';
+            document.getElementById('overlay').style.display = 'none';
+
+            // Build Board
+            const board = $('board');
+            board.innerHTML = '';
+            const cats = shuffle(Object.keys(DATA));
+            cats.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'cat';
+                div.innerHTML = `<h3>${cat}</h3><div class="drop" data-cat="${cat}"></div>`;
+                const drop = div.querySelector('.drop');
+                drop.ondragover = e => e.preventDefault();
+                drop.ondrop = handleDrop;
+                board.appendChild(div);
+            });
+
+            // Build Terms
+            const termsContainer = $('terms');
+            termsContainer.innerHTML = '';
+            let items = [];
+            for (let cat in DATA) {
+                DATA[cat].forEach(term => items.push([term, cat]));
+            }
+            total = items.length;
+            shuffle(items).forEach(([term, cat]) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.textContent = term;
+                card.draggable = true;
+                card.dataset.cat = cat;
+                card.ondragstart = e => e.dataTransfer.setData('text', term);
+                termsContainer.appendChild(card);
+            });
+
+            // Timer
+            timer = setInterval(() => {
+                timeLeft--;
+                $('tm').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishGame();
+                }
+            }, 1000);
+        }
+
+        // --- DROP HANDLER ---
+        function handleDrop(e) {
+            e.preventDefault();
+            const term = e.dataTransfer.getData('text');
+            const card = [...document.querySelectorAll('.card')].find(el => el.textContent === term);
+            if (!card) return;
+
+            const targetCat = this.dataset.cat;
+
+            if (card.dataset.cat === targetCat) {
+                // Correct!
+                card.classList.add('ok');
+                card.draggable = false;
+                this.appendChild(card);
+                score += 10;
+                correct++;
+                $('sc').textContent = score;
+                $('bar').style.width = (correct / total * 100) + '%';
+                $('msg').innerHTML = '✅ <span class="highlight">Correct!</span>';
+                
+                // Subtle gold glow on progress bar
+                $('bar').style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.4)';
+                setTimeout(() => {
+                    $('bar').style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.2)';
+                }, 300);
+
+                if (correct === total) {
+                    clearInterval(timer);
+                    setTimeout(finishGame, 400);
+                }
+            } else {
+                // Wrong!
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 300);
+                $('msg').innerHTML = '❌ Try again';
+                $('msg').style.color = '#ff6b6b';
+                setTimeout(() => {
+                    $('msg').style.color = '#b0c4e8';
+                }, 500);
+            }
+        }
+
+        // --- FINISH ---
+        function finishGame() {
+            let medal = '🥉';
+            let title = 'Good Effort!';
+            if (correct === total && timeLeft > 90) { medal = '🥇';
+                title = 'Perfect!'; } else if (correct === total) { medal = '🥈';
+                title = 'Great Job!'; } else if (correct / total > 0.6) { medal = '🥉';
+                title = 'Not Bad!'; } else { medal = '📚';
+                title = 'Keep Practicing!'; }
+
+            $('medal').textContent = medal;
+            document.querySelector('.modal h2').textContent = title;
+            $('stats').innerHTML = `Score <strong style="color:#f5d77b;">${score}</strong> • Correct <strong style="color:#f5d77b;">${correct}/${total}</strong> • Time left <strong style="color:#f5d77b;">${timeLeft}s</strong>`;
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        // Start!
+        startGame();
+    </script>
+</body>
+</html>

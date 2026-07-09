@@ -1,0 +1,989 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Distance DELTA Discourse Millionaire</title>
+    <style>
+        /* --- Branded Design System --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a1628;
+            color: #e8f0fe;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a3a6a, #0a1628 80%),
+                radial-gradient(circle at 80% 70%, #1a2a4a, transparent 60%);
+        }
+        .game-container {
+            max-width: 620px;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header with Logo --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.15);
+            flex-shrink: 0;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
+        .logo .distance {
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #8a9bb5;
+            text-transform: uppercase;
+        }
+        .logo .delta {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #d4af37, #f5d77b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            margin-top: -2px;
+        }
+        .logo-divider {
+            width: 2px;
+            height: 24px;
+            background: linear-gradient(to bottom, #d4af37, transparent);
+            opacity: 0.3;
+        }
+        .header h1 {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #b0c4e8;
+            letter-spacing: -0.3px;
+        }
+        .header .sub {
+            font-size: 0.5rem;
+            opacity: 0.5;
+            font-weight: 400;
+            color: #8a9bb5;
+            display: block;
+            margin-top: 1px;
+        }
+
+        /* --- Stats Bar --- */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.55rem;
+        }
+        .stat-item .icon {
+            font-size: 0.7rem;
+        }
+        .stat-item .value {
+            font-weight: 700;
+            color: #f5d77b;
+            font-size: 0.7rem;
+            min-width: 16px;
+        }
+        .stat-item .label {
+            opacity: 0.5;
+            font-weight: 400;
+            font-size: 0.5rem;
+        }
+        .stat-item .prize-value {
+            font-weight: 700;
+            color: #f5d77b;
+            font-size: 0.9rem;
+        }
+
+        /* --- Progress --- */
+        .progress-wrap {
+            background: rgba(255, 255, 255, 0.05);
+            height: 4px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #d4af37, #f5d77b);
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- Question Area --- */
+        .question-area {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            text-align: center;
+            flex-shrink: 0;
+            min-height: 60px;
+        }
+        .question-area .q-number {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.3;
+            margin-bottom: 4px;
+        }
+        .question-area .q-text {
+            font-size: 0.9rem;
+            color: #e0ecff;
+            font-weight: 500;
+            min-height: 28px;
+            line-height: 1.4;
+        }
+        .question-area .q-text .highlight {
+            color: #f5d77b;
+        }
+        .question-area .q-example {
+            font-size: 0.6rem;
+            color: #aab8d0;
+            font-style: italic;
+            margin-top: 4px;
+            opacity: 0.8;
+        }
+
+        /* --- Options --- */
+        .options-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.7rem;
+            color: #d0dfff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: left;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .opt-btn .letter {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.65rem;
+            color: #8a9bb5;
+            flex-shrink: 0;
+        }
+        .opt-btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.06);
+            border-color: rgba(212, 175, 55, 0.2);
+            transform: translateY(-1px);
+        }
+        .opt-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.4;
+        }
+        .opt-btn.correct {
+            background: rgba(90, 220, 140, 0.15);
+            border-color: #5adc8c;
+            color: #b0ffd0;
+        }
+        .opt-btn.correct .letter {
+            background: rgba(90, 220, 140, 0.2);
+            color: #5adc8c;
+        }
+        .opt-btn.wrong {
+            background: rgba(255, 80, 80, 0.15);
+            border-color: #ff6b6b;
+            color: #ffb0b0;
+        }
+        .opt-btn.wrong .letter {
+            background: rgba(255, 80, 80, 0.2);
+            color: #ff6b6b;
+        }
+        .opt-btn.reveal-correct {
+            border-color: rgba(90, 220, 140, 0.3);
+            background: rgba(90, 220, 140, 0.05);
+        }
+
+        /* --- Lifelines --- */
+        .lifelines {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .lifeline-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.55rem;
+            color: #b0c4e8;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .lifeline-btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.06);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+        .lifeline-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .lifeline-btn .icon {
+            font-size: 0.8rem;
+        }
+
+        /* --- Feedback --- */
+        .feedback {
+            text-align: center;
+            min-height: 18px;
+            font-size: 0.6rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+            padding: 2px 0;
+        }
+        .feedback .correct-fb {
+            color: #5adc8c;
+        }
+        .feedback .wrong-fb {
+            color: #ff6b6b;
+        }
+        .feedback .info-fb {
+            color: #b0c4e8;
+        }
+        .feedback .win-fb {
+            color: #f5d77b;
+            font-size: 0.8rem;
+        }
+
+        /* --- Controls --- */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(212, 175, 55, 0.06);
+            flex-shrink: 0;
+        }
+        .btn {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #f5d77b;
+            padding: 4px 16px;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 0.6rem;
+            backdrop-filter: blur(4px);
+        }
+        .btn:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.18);
+            transform: scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.08);
+        }
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37, #b8962e);
+            border: none;
+            color: #0a1628;
+            font-weight: 700;
+            font-size: 0.65rem;
+            padding: 5px 20px;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e5c44a, #c4a030);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        /* --- Game Over Modal --- */
+        .gameover-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gameover-overlay.active {
+            opacity: 1;
+        }
+        .gameover-modal {
+            background: linear-gradient(145deg, #0f2240, #0a1628);
+            padding: 28px 32px;
+            border-radius: 28px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            animation: modalPopIn 0.4s ease;
+        }
+        @keyframes modalPopIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .gameover-modal .result-icon {
+            font-size: 52px;
+            line-height: 1.2;
+        }
+        .gameover-modal h2 {
+            font-size: 1.5rem;
+            margin: 4px 0 2px;
+            font-weight: 600;
+        }
+        .gameover-modal .subtitle {
+            opacity: 0.6;
+            margin-bottom: 14px;
+            color: #b0c4e8;
+            font-size: 0.85rem;
+        }
+        .gameover-modal .prize-display {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f5d77b;
+            margin: 8px 0 12px;
+        }
+        .gameover-modal .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin: 12px 0 16px;
+        }
+        .gameover-modal .stat-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 10px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .gameover-modal .stat-box .num {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f5d77b;
+            display: block;
+        }
+        .gameover-modal .stat-box .lbl {
+            font-size: 0.55rem;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .gameover-modal .btn {
+            font-size: 0.8rem;
+            padding: 8px 32px;
+        }
+
+        /* --- Responsive --- */
+        @media(max-width: 450px) {
+            .game-container {
+                padding: 10px;
+                border-radius: 18px;
+            }
+            .question-area {
+                padding: 8px 12px;
+                min-height: 48px;
+            }
+            .question-area .q-text {
+                font-size: 0.75rem;
+                min-height: 22px;
+            }
+            .options-area {
+                gap: 4px;
+            }
+            .opt-btn {
+                font-size: 0.6rem;
+                padding: 6px 10px;
+                border-radius: 8px;
+            }
+            .opt-btn .letter {
+                width: 20px;
+                height: 20px;
+                font-size: 0.55rem;
+            }
+            .lifelines {
+                gap: 6px;
+            }
+            .lifeline-btn {
+                font-size: 0.5rem;
+                padding: 3px 10px;
+            }
+            .header h1 {
+                font-size: 0.7rem;
+            }
+            .logo .delta {
+                font-size: 0.9rem;
+            }
+            .stats-bar {
+                padding: 3px 8px;
+            }
+            .stat-item {
+                font-size: 0.5rem;
+            }
+            .feedback {
+                font-size: 0.55rem;
+                min-height: 16px;
+            }
+            .gameover-modal {
+                padding: 20px 18px;
+            }
+            .gameover-modal h2 {
+                font-size: 1.2rem;
+            }
+            .gameover-modal .prize-display {
+                font-size: 1.4rem;
+            }
+        }
+        @media(max-height: 700px) {
+            .game-container {
+                padding: 8px;
+            }
+            .header {
+                margin-bottom: 4px;
+                padding-bottom: 4px;
+            }
+            .stats-bar {
+                padding: 2px 8px;
+                margin-bottom: 4px;
+            }
+            .question-area {
+                padding: 6px 12px;
+                min-height: 40px;
+                margin-bottom: 6px;
+            }
+            .question-area .q-text {
+                font-size: 0.7rem;
+                min-height: 18px;
+            }
+            .options-area {
+                margin-bottom: 4px;
+            }
+            .opt-btn {
+                padding: 4px 10px;
+                font-size: 0.55rem;
+            }
+            .lifelines {
+                margin-bottom: 4px;
+            }
+            .controls {
+                padding-top: 4px;
+            }
+            .feedback {
+                min-height: 14px;
+                font-size: 0.5rem;
+                margin-bottom: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo">
+                    <span class="distance">The</span>
+                    <span class="distance" style="font-size:0.5rem;letter-spacing:2px;margin-top:-1px;">Distance</span>
+                    <span class="delta">DELTA</span>
+                </div>
+                <div class="logo-divider"></div>
+                <div>
+                    <h1>Discourse Millionaire</h1>
+                    <span class="sub">Discourse • 22 Terms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="icon">📌</span>
+                <span class="label">Question:</span>
+                <span class="value" id="qDisplay">1</span>
+                <span class="label">/ 15</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">💰</span>
+                <span class="label">Prize:</span>
+                <span class="prize-value" id="prizeDisplay">£100</span>
+            </div>
+            <div class="stat-item">
+                <span class="icon">✅</span>
+                <span class="label">Correct:</span>
+                <span class="value" id="correctDisplay">0</span>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Question Area -->
+        <div class="question-area">
+            <div class="q-number" id="qNumber">Question 1 of 15</div>
+            <div class="q-text" id="qText">What is the definition of <span class="highlight">cohesion</span>?</div>
+            <div class="q-example" id="qExample"></div>
+        </div>
+
+        <!-- Options -->
+        <div class="options-area" id="optionsArea">
+            <button class="opt-btn" data-index="0"><span class="letter">A</span> Option A</button>
+            <button class="opt-btn" data-index="1"><span class="letter">B</span> Option B</button>
+            <button class="opt-btn" data-index="2"><span class="letter">C</span> Option C</button>
+            <button class="opt-btn" data-index="3"><span class="letter">D</span> Option D</button>
+        </div>
+
+        <!-- Lifelines -->
+        <div class="lifelines">
+            <button class="lifeline-btn" id="fiftyBtn" onclick="useFiftyFifty()"><span class="icon">✂️</span> 50:50</button>
+            <button class="lifeline-btn" id="audienceBtn" onclick="useAudience()"><span class="icon">👥</span> Ask Audience</button>
+            <button class="lifeline-btn" id="skipBtn" onclick="useSkip()"><span class="icon">⏭️</span> Skip</button>
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedback">
+            <span class="info-fb" id="feedbackText">Welcome! Answer 15 questions to win £1,000,000!</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-secondary" onclick="resetGame()">🔄 New Game</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none;">Next Question →</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="gameover-overlay" id="gameoverOverlay">
+        <div class="gameover-modal">
+            <div class="result-icon" id="resultIcon">🏆</div>
+            <h2 id="resultTitle">You Win!</h2>
+            <p class="subtitle" id="resultSubtitle">You are a Discourse Millionaire!</p>
+            <div class="prize-display" id="resultPrize">£1,000,000</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="num" id="finalCorrect">0</span>
+                    <span class="lbl">Correct</span>
+                </div>
+                <div class="stat-box">
+                    <span class="num" id="finalTotal">0</span>
+                    <span class="lbl">Total</span>
+                </div>
+                <div class="stat-box">
+                    <span class="num" id="finalPrize">0</span>
+                    <span class="lbl">Prize</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="document.getElementById('gameoverOverlay').style.display='none'; resetGame();">🔄 Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: 22 Discourse Terms (including Fronting) ---
+        const ALL_TERMS = [
+            { term: "Cohesion", definition: "The grammatical and lexical links that connect parts of a text, creating a unified whole.", example: "📌 'I bought a car. It is red.' – the pronoun 'it' refers back to 'car'" },
+            { term: "Coherence", definition: "The logical connections that make a text meaningful and unified.", example: "📌 A text about a journey arranged chronologically is coherent." },
+            { term: "Reference", definition: "Using pronouns or other words to refer back to something mentioned.", example: "📌 'I met Sarah. She was happy.' – 'She' refers back to Sarah" },
+            { term: "Substitution", definition: "Replacing a word or phrase with a short form to avoid repetition.", example: "📌 'I wanted a coffee, so I bought one.' – 'one' substitutes for 'coffee'" },
+            { term: "Ellipsis", definition: "Omitting words that are understood from context.", example: "📌 'She went home, and I [went home] too.' – the repeated words are omitted" },
+            { term: "Discourse Marker", definition: "A word or phrase that signals the structure of discourse.", example: "📌 'However,' 'Firstly,' 'In conclusion,' 'You know'" },
+            { term: "Anaphoric Reference", definition: "Reference that refers back to something already mentioned.", example: "📌 'I saw John. He was happy.' – 'He' refers back to John" },
+            { term: "Cataphoric Reference", definition: "Reference that refers forward to something not yet mentioned.", example: "📌 'When he arrived, John sat down.' – 'he' refers forward to John" },
+            { term: "Exophoric Reference", definition: "Reference to something outside the text, in the physical context.", example: "📌 'Look at that!' – pointing to something in the environment" },
+            { term: "Deixis", definition: "Words whose meaning depends on the context of the utterance (time, place, person).", example: "📌 'here,' 'there,' 'now,' 'then,' 'you,' 'me'" },
+            { term: "Conversational Repair", definition: "The strategies speakers use to correct or clarify misunderstandings in conversation.", example: "📌 'I'll meet you at... actually, let's meet at the station instead.'" },
+            { term: "Illocutionary Force", definition: "The intended meaning or communicative function behind an utterance, beyond its literal words.", example: "📌 'It's cold in here' – illocutionary force is a request to close a window" },
+            { term: "Theme", definition: "The starting point of a clause – what the sentence is about; the given or known information.", example: "📌 In 'The cat sat on the mat,' 'The cat' is the Theme" },
+            { term: "Rheme", definition: "The part of a clause that provides new information about the Theme.", example: "📌 In 'The cat sat on the mat,' 'sat on the mat' is the Rheme" },
+            { term: "Pragmatic Meaning", definition: "The meaning of an utterance in context, considering the speaker's intention and the situation.", example: "📌 'Can you pass the salt?' – pragmatic meaning is a request" },
+            { term: "Phatic Language", definition: "Language used for social bonding rather than exchanging information.", example: "📌 'How are you?' or 'Lovely weather, isn't it?'" },
+            { term: "Turn-Taking", definition: "The system by which speakers in a conversation take turns speaking.", example: "📌 A speaker signals they are finishing by pausing or lowering pitch" },
+            { term: "Back-channelling", definition: "Giving small responses to show understanding.", example: "📌 'uh-huh,' 'I see,' 'mmm' – back-channelling signals" },
+            { term: "Hedging", definition: "Using words or phrases to soften the force of an utterance.", example: "📌 'I sort of think...' or 'It's a bit late.'" },
+            { term: "Adjacency Pair", definition: "Two turns in conversation that naturally go together.", example: "📌 Question → Answer; Greeting → Greeting; Offer → Acceptance/Refusal" },
+            // --- FRONTING ADDED HERE ---
+            { term: "Fronting", definition: "Moving a word or phrase to the front of a sentence for emphasis.", example: "📌 'The party, we loved it!' (fronted object) vs. 'We loved the party.'" }
+        ];
+
+        // --- PRIZE LEVELS (UK £) ---
+        const PRIZES = [
+            "£100",
+            "£200",
+            "£300",
+            "£500",
+            "£1,000",
+            "£2,000",
+            "£4,000",
+            "£8,000",
+            "£16,000",
+            "£32,000",
+            "£64,000",
+            "£125,000",
+            "£250,000",
+            "£500,000",
+            "£1,000,000"
+        ];
+
+        // --- GAME STATE ---
+        let gameState = {
+            currentQuestion: 0,
+            totalQuestions: 15,
+            correctCount: 0,
+            prizeIndex: 0,
+            currentTerm: null,
+            gameActive: false,
+            answered: false,
+            usedFiftyFifty: false,
+            usedAudience: false,
+            usedSkip: false,
+            questions: [],
+            fiftyFiftyUsed: false,
+            audienceUsed: false,
+            skipUsed: false
+        };
+
+        const $ = id => document.getElementById(id);
+
+        // --- SHUFFLE FUNCTION ---
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // --- INITIALISE GAME ---
+        function initGame() {
+            // Build 15 questions from ALL_TERMS
+            const shuffledTerms = shuffleArray([...ALL_TERMS]);
+            gameState.questions = shuffledTerms.slice(0, 15);
+            gameState.currentQuestion = 0;
+            gameState.correctCount = 0;
+            gameState.prizeIndex = 0;
+            gameState.gameActive = true;
+            gameState.answered = false;
+            gameState.fiftyFiftyUsed = false;
+            gameState.audienceUsed = false;
+            gameState.skipUsed = false;
+
+            $('fiftyBtn').disabled = false;
+            $('audienceBtn').disabled = false;
+            $('skipBtn').disabled = false;
+            $('nextBtn').style.display = 'none';
+            document.getElementById('gameoverOverlay').style.display = 'none';
+            document.getElementById('gameoverOverlay').classList.remove('active');
+
+            showQuestion();
+        }
+
+        // --- SHOW QUESTION ---
+        function showQuestion() {
+            if (gameState.currentQuestion >= gameState.totalQuestions) {
+                winGame();
+                return;
+            }
+
+            const term = gameState.questions[gameState.currentQuestion];
+            gameState.currentTerm = term;
+            gameState.answered = false;
+
+            $('qDisplay').textContent = gameState.currentQuestion + 1;
+            $('prizeDisplay').textContent = PRIZES[gameState.prizeIndex];
+            $('qNumber').textContent = `Question ${gameState.currentQuestion + 1} of ${gameState.totalQuestions}`;
+            $('qText').innerHTML = `What is the definition of <span class="highlight">${term.term}</span>?`;
+            $('qExample').textContent = term.example || '';
+            $('feedbackText').textContent = 'Choose your answer!';
+            $('feedbackText').className = 'info-fb';
+            $('progressBar').style.width = ((gameState.currentQuestion / gameState.totalQuestions) * 100) + '%';
+
+            // Build options: 1 correct, 3 wrong
+            const wrongTerms = ALL_TERMS.filter(t => t.term !== term.term);
+            const shuffledWrong = shuffleArray([...wrongTerms]);
+            const options = [term.definition];
+            const wrongOptions = shuffledWrong.slice(0, 3).map(t => t.definition);
+            while (wrongOptions.length < 3) {
+                wrongOptions.push("A different definition");
+            }
+            options.push(...wrongOptions);
+            const shuffledOptions = shuffleArray([...options]);
+            const correctIndex = shuffledOptions.indexOf(term.definition);
+
+            const optContainer = $('optionsArea');
+            optContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            shuffledOptions.forEach((text, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.dataset.index = index;
+                btn.dataset.correct = (index === correctIndex) ? 'true' : 'false';
+                btn.innerHTML = `<span class="letter">${letters[index]}</span> ${text}`;
+                btn.onclick = () => handleAnswer(btn, index, correctIndex);
+                optContainer.appendChild(btn);
+            });
+
+            document.querySelectorAll('.opt-btn').forEach(b => b.disabled = false);
+            $('nextBtn').style.display = 'none';
+        }
+
+        // --- HANDLE ANSWER ---
+        function handleAnswer(btn, selectedIndex, correctIndex) {
+            if (gameState.answered || !gameState.gameActive) return;
+            gameState.answered = true;
+
+            const allBtns = document.querySelectorAll('.opt-btn');
+            allBtns.forEach(b => b.disabled = true);
+
+            const isCorrect = (selectedIndex === correctIndex);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                gameState.correctCount++;
+                gameState.prizeIndex++;
+                $('correctDisplay').textContent = gameState.correctCount;
+                $('feedbackText').textContent = '✅ Correct! Well done!';
+                $('feedbackText').className = 'correct-fb';
+
+                if (gameState.currentQuestion >= gameState.totalQuestions - 1) {
+                    // Last question - win!
+                    setTimeout(() => winGame(), 800);
+                    return;
+                }
+
+                $('nextBtn').style.display = 'inline-block';
+                $('nextBtn').textContent = 'Next Question →';
+
+            } else {
+                btn.classList.add('wrong');
+                allBtns.forEach(b => {
+                    if (b.dataset.correct === 'true') {
+                        b.classList.add('reveal-correct');
+                    }
+                });
+                $('feedbackText').textContent = '❌ Wrong! The answer was: ' + gameState.currentTerm.definition;
+                $('feedbackText').className = 'wrong-fb';
+                setTimeout(() => gameOver(false), 3000);
+            }
+        }
+
+        // --- NEXT QUESTION ---
+        function nextQuestion() {
+            if (gameState.answered) {
+                gameState.currentQuestion++;
+                $('nextBtn').style.display = 'none';
+                showQuestion();
+            }
+        }
+
+        // --- WIN GAME ---
+        function winGame() {
+            gameState.gameActive = false;
+            const overlay = $('gameoverOverlay');
+            overlay.style.display = 'flex';
+            void overlay.offsetWidth;
+            overlay.classList.add('active');
+
+            $('resultIcon').textContent = '🎉';
+            $('resultTitle').textContent = 'You Are a Millionaire!';
+            $('resultTitle').style.color = '#f5d77b';
+            $('resultSubtitle').textContent = 'You answered all 15 questions correctly!';
+            $('resultPrize').textContent = '£1,000,000';
+            $('finalCorrect').textContent = gameState.correctCount;
+            $('finalTotal').textContent = gameState.totalQuestions;
+            $('finalPrize').textContent = '£1,000,000';
+        }
+
+        // --- GAME OVER ---
+        function gameOver(won) {
+            gameState.gameActive = false;
+            const overlay = $('gameoverOverlay');
+            overlay.style.display = 'flex';
+            void overlay.offsetWidth;
+            overlay.classList.add('active');
+
+            const prize = gameState.prizeIndex > 0 ? PRIZES[gameState.prizeIndex - 1] : '£0';
+
+            $('resultIcon').textContent = '😅';
+            $('resultTitle').textContent = 'Game Over!';
+            $('resultTitle').style.color = '#ff6b6b';
+            $('resultSubtitle').textContent = `You reached question ${gameState.currentQuestion + 1}`;
+            $('resultPrize').textContent = `You take home ${prize}`;
+            $('finalCorrect').textContent = gameState.correctCount;
+            $('finalTotal').textContent = gameState.totalQuestions;
+            $('finalPrize').textContent = prize;
+        }
+
+        // --- 50:50 LIFELINE ---
+        function useFiftyFifty() {
+            if (gameState.fiftyFiftyUsed || gameState.answered) return;
+            gameState.fiftyFiftyUsed = true;
+            $('fiftyBtn').disabled = true;
+
+            const btns = document.querySelectorAll('.opt-btn');
+            const correctBtn = Array.from(btns).find(b => b.dataset.correct === 'true');
+            const wrongBtns = Array.from(btns).filter(b => b.dataset.correct !== 'true');
+            const shuffledWrong = shuffleArray([...wrongBtns]);
+            // Remove two wrong options
+            const toRemove = shuffledWrong.slice(0, 2);
+            toRemove.forEach(b => {
+                b.style.display = 'none';
+            });
+
+            $('feedbackText').textContent = '✂️ 50:50 used! Two options removed.';
+            $('feedbackText').className = 'info-fb';
+        }
+
+        // --- AUDIENCE LIFELINE ---
+        function useAudience() {
+            if (gameState.audienceUsed || gameState.answered) return;
+            gameState.audienceUsed = true;
+            $('audienceBtn').disabled = true;
+
+            const btns = document.querySelectorAll('.opt-btn');
+            const correctBtn = Array.from(btns).find(b => b.dataset.correct === 'true');
+            const wrongBtns = Array.from(btns).filter(b => b.dataset.correct !== 'true');
+
+            // Generate audience percentages
+            const correctPercentage = 50 + Math.floor(Math.random() * 25); // 50-75%
+            const remaining = 100 - correctPercentage;
+            let wrongPercentages = [];
+            for (let i = 0; i < wrongBtns.length; i++) {
+                if (i === wrongBtns.length - 1) {
+                    wrongPercentages.push(remaining - wrongPercentages.reduce((a, b) => a + b, 0));
+                } else {
+                    wrongPercentages.push(Math.floor(Math.random() * (remaining / 2)));
+                }
+            }
+            // Ensure they add up
+            const sum = wrongPercentages.reduce((a, b) => a + b, 0);
+            if (sum !== remaining) {
+                wrongPercentages[wrongPercentages.length - 1] += remaining - sum;
+            }
+
+            // Shuffle percentages among wrong buttons
+            const shuffledPercentages = shuffleArray([...wrongPercentages]);
+            let idx = 0;
+            wrongBtns.forEach((b, i) => {
+                const pct = shuffledPercentages[idx] || 0;
+                idx++;
+                // Update the button text to show percentage
+                const text = b.textContent;
+                // Find the letter part
+                const letterSpan = b.querySelector('.letter');
+                const textPart = text.replace(letterSpan.textContent, '').trim();
+                b.innerHTML = `<span class="letter">${letterSpan.textContent}</span> ${textPart} <span style="color:#f5d77b;font-size:0.6rem;">(${Math.round(pct)}%)</span>`;
+            });
+
+            // Show correct percentage
+            const correctText = correctBtn.textContent;
+            const correctLetter = correctBtn.querySelector('.letter');
+            const correctTextPart = correctText.replace(correctLetter.textContent, '').trim();
+            correctBtn.innerHTML = `<span class="letter">${correctLetter.textContent}</span> ${correctTextPart} <span style="color:#5adc8c;font-size:0.6rem;font-weight:700;">(${Math.round(correctPercentage)}%)</span>`;
+
+            $('feedbackText').textContent = '👥 Audience says...';
+            $('feedbackText').className = 'info-fb';
+        }
+
+        // --- SKIP LIFELINE ---
+        function useSkip() {
+            if (gameState.skipUsed || gameState.answered) return;
+            gameState.skipUsed = true;
+            $('skipBtn').disabled = true;
+
+            // Skip to next question without answering
+            $('feedbackText').textContent = '⏭️ Question skipped! Moving to the next one.';
+            $('feedbackText').className = 'info-fb';
+            
+            // Reset options
+            document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            
+            setTimeout(() => {
+                gameState.currentQuestion++;
+                showQuestion();
+            }, 800);
+        }
+
+        // --- RESET GAME ---
+        function resetGame() {
+            document.getElementById('gameoverOverlay').style.display = 'none';
+            document.getElementById('gameoverOverlay').classList.remove('active');
+            initGame();
+        }
+
+        // --- START ---
+        initGame();
+    </script>
+</body>
+</html>
