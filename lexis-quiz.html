@@ -187,6 +187,37 @@
             border: 1px solid rgba(212, 175, 55, 0.1);
         }
 
+        /* --- Example Display --- */
+        .example-display {
+            display: none;
+            background: rgba(212, 175, 55, 0.06);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 12px;
+            text-align: left;
+            animation: slideUp 0.4s ease;
+        }
+        .example-display .example-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.4;
+            color: #8a9bb5;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .example-display .example-text {
+            color: #d0dfff;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+        .example-display .example-text .highlight-term {
+            color: #f5d77b;
+            font-weight: 600;
+            font-style: normal;
+        }
+
         /* --- Options --- */
         .options {
             display: grid;
@@ -266,12 +297,19 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
         .feedback .correct-fb {
             color: #5adc8c;
         }
         .feedback .wrong-fb {
             color: #ff6b6b;
+        }
+        .feedback .example-fb {
+            color: #b0c4e8;
+            font-size: 0.85rem;
+            font-weight: 400;
+            opacity: 0.7;
         }
 
         /* --- Bottom Controls --- */
@@ -547,6 +585,12 @@
             <div class="question-text" id="questionText">What is the definition of <strong>polysemy</strong>?</div>
             <div class="question-hint" id="questionHint">Select the correct option below</div>
             <span class="topic-tag" id="topicTag">Lexis &amp; Vocabulary</span>
+            
+            <!-- Example Display (hidden until answered) -->
+            <div class="example-display" id="exampleDisplay">
+                <span class="example-label">📌 Example</span>
+                <span class="example-text" id="exampleText">"<span class="highlight-term">head</span>" – the physical body part, the leader of an organisation, and the top of an object – all relate to the notion of "topmost" or "primary position."</span>
+            </div>
         </div>
 
         <!-- Options -->
@@ -935,6 +979,9 @@
             $('feedbackText').className = '';
             document.getElementById('overlay').style.display = 'none';
             
+            // Hide example display
+            $('exampleDisplay').style.display = 'none';
+            
             if (timer) clearInterval(timer);
             startTimer();
             showQuestion();
@@ -967,6 +1014,9 @@
             $('questionText').innerHTML = `What is the definition of <strong>${q.term}</strong>?`;
             $('questionHint').textContent = 'Select the correct option below';
             $('topicTag').textContent = q.topic;
+            
+            // Hide example display for new question
+            $('exampleDisplay').style.display = 'none';
 
             // Shuffle options
             const shuffledOptions = shuffleArray([...q.options]);
@@ -1003,20 +1053,32 @@
             allBtns.forEach(b => b.disabled = true);
 
             const isCorrect = (selectedIndex === correctIndex);
+            const q = shuffledQuestions[currentQuestion];
+
+            // Show example after answering
+            const exampleDisplay = $('exampleDisplay');
+            const exampleText = $('exampleText');
+            // Highlight the term in the example
+            const highlightedExample = q.example.replace(
+                new RegExp(q.term, 'gi'), 
+                '<span class="highlight-term">' + q.term + '</span>'
+            );
+            exampleText.innerHTML = highlightedExample;
+            exampleDisplay.style.display = 'block';
 
             if (isCorrect) {
                 btn.classList.add('correct');
                 score += 10 + (streak * 2);
                 correctCount++;
                 streak++;
-                $('feedbackText').textContent = '✅ Correct! Well done!';
+                $('feedbackText').innerHTML = '✅ Correct! Well done! <span class="example-fb">See the example below.</span>';
                 $('feedbackText').className = 'correct-fb';
                 
                 // Level up every 5 correct answers
                 if (correctCount % 5 === 0) {
                     level++;
                     $('levelDisplay').textContent = level;
-                    $('feedbackText').textContent = '🎯 Level Up! Amazing!';
+                    $('feedbackText').innerHTML = '🎯 Level Up! Amazing! <span class="example-fb">See the example below.</span>';
                 }
             } else {
                 btn.classList.add('wrong');
@@ -1027,7 +1089,7 @@
                     }
                 });
                 streak = 0;
-                $('feedbackText').textContent = '❌ Not quite. Keep learning!';
+                $('feedbackText').innerHTML = '❌ Not quite. Keep learning! <span class="example-fb">See the example below.</span>';
                 $('feedbackText').className = 'wrong-fb';
             }
 
