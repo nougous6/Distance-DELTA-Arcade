@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Distance DELTA Revision Games</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0a1628;
+            color: #e8f0fe;
+            min-height: 100vh;
+            padding: 30px 20px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a3a6a, #0a1628 80%),
+                radial-gradient(circle at 80% 70%, #1a2a4a, transparent 60%);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header .brand {
+            font-size: 0.8rem;
+            opacity: 0.3;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #8a9bb5;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #d4af37, #f5d77b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        .header .sub {
+            font-size: 1rem;
+            opacity: 0.5;
+            color: #b0c4e8;
+        }
+        .category {
+            margin-bottom: 28px;
+        }
+        .category h2 {
+            font-size: 1.1rem;
+            color: #f5d77b;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .game-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 6px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #d0dfff;
+        }
+        .game-link:hover {
+            background: rgba(212, 175, 55, 0.06);
+            border-color: rgba(212, 175, 55, 0.2);
+            transform: translateX(4px);
+        }
+        .game-link .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .game-link .icon {
+            font-size: 1.2rem;
+        }
+        .game-link .name {
+            font-weight: 500;
+        }
+        .game-link .desc {
+            font-size: 0.75rem;
+            opacity: 0.4;
+        }
+        .game-link .play-btn {
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            color: #f5d77b;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .game-link:hover .play-btn {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.7rem;
+            opacity: 0.3;
+        }
+        @media(max-width: 600px) {
+            body { padding: 16px; }
+            .header h1 { font-size: 1.8rem; }
+            .game-link { flex-wrap: wrap; gap: 6px; }
+            .game-link .play-btn { padding: 2px 12px; font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="brand">The Distance</span>
+            <h1>DELTA Revision Arcade</h1>
+            <div class="sub">Module 1 Terminology Games</div>
+        </div>
+
+        <!-- PHONOLOGY -->
+        <div class="category">
+            <h2>🔹 Phonology</h2>
+            <a class="game-link" href="[YOUR_FILE_NAME_1].html">
+                <span class="left">
+                    <span class="icon">📦</span>
+                    <span>
+                        <span class="name">Drag &amp; Drop Classification</span>
+                        <span class="desc">Sort terms into categories</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+            <a class="game-link" href="[YOUR_FILE_NAME_2].html">
+                <span class="left">
+                    <span class="icon">🤔</span>
+                    <span>
+                        <span class="name">Odd One Out</span>
+                        <span class="desc">Find the term that doesn't belong</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+            <a class="game-link" href="[YOUR_FILE_NAME_3].html">
+                <span class="left">
+                    <span class="icon">🀄</span>
+                    <span>
+                        <span class="name">Terminology Dominoes</span>
+                        <span class="desc">Match terms to definitions</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+        </div>
+
+        <!-- GRAMMAR & LEXIS -->
+        <div class="category">
+            <h2>🔹 Grammar &amp; Lexis</h2>
+            <a class="game-link" href="[YOUR_FILE_NAME_4].html">
+                <span class="left">
+                    <span class="icon">❓</span>
+                    <span>
+                        <span class="name">Multiple Choice Quiz</span>
+                        <span class="desc">Answer definitions correctly</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+            <a class="game-link" href="[YOUR_FILE_NAME_5].html">
+                <span class="left">
+                    <span class="icon">🏔️</span>
+                    <span>
+                        <span class="name">Terminology Pyramid</span>
+                        <span class="desc">Build a pyramid of terms</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+        </div>
+
+        <!-- TESTING & ASSESSMENT -->
+        <div class="category">
+            <h2>🔹 Testing &amp; Assessment</h2>
+            <a class="game-link" href="[YOUR_FILE_NAME_6].html">
+                <span class="left">
+                    <span class="icon">🎲</span>
+                    <span>
+                        <span class="name">Snakes &amp; Ladders</span>
+                        <span class="desc">Board game with terminology questions</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+            <a class="game-link" href="[YOUR_FILE_NAME_7].html">
+                <span class="left">
+                    <span class="icon">🎯</span>
+                    <span>
+                        <span class="name">Terminology Bingo</span>
+                        <span class="desc">Race to match terms against an avatar</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+        </div>
+
+        <!-- DISCOURSE -->
+        <div class="category">
+            <h2>🔹 Discourse</h2>
+            <a class="game-link" href="[YOUR_FILE_NAME_8].html">
+                <span class="left">
+                    <span class="icon">💰</span>
+                    <span>
+                        <span class="name">Who Wants to Be a Millionaire?</span>
+                        <span class="desc">Answer 15 questions to win!</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+            <a class="game-link" href="[YOUR_FILE_NAME_9].html">
+                <span class="left">
+                    <span class="icon">🏁</span>
+                    <span>
+                        <span class="name">Terminology Race</span>
+                        <span class="desc">Race against the clock</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+        </div>
+
+        <!-- ALL TOPICS -->
+        <div class="category">
+            <h2>🔹 All Topics</h2>
+            <a class="game-link" href="[YOUR_FILE_NAME_10].html">
+                <span class="left">
+                    <span class="icon">❌</span>
+                    <span>
+                        <span class="name">Noughts &amp; Crosses</span>
+                        <span class="desc">Play against an AI avatar</span>
+                    </span>
+                </span>
+                <span class="play-btn">▶ Play</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            Distance DELTA &bull; Module 1 Revision &bull; 10 Games
+        </div>
+    </div>
+</body>
+</html>
