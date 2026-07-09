@@ -629,13 +629,13 @@
 
         <!-- Feedback -->
         <div class="feedback" id="feedback">
-            <span class="info-fb" id="feedbackText">Press <strong>"Start Round"</strong> to begin!</span>
+            <span class="info-fb" id="feedbackText">Press "Start Round" to begin! Match terms to definitions.</span>
         </div>
 
         <!-- Controls -->
         <div class="controls">
             <button class="btn btn-secondary" onclick="resetGame()">🔄 New Game</button>
-            <button class="btn btn-primary" id="startBtn" onclick="startRound()">🚀 Start Round</button>
+            <button class="btn btn-primary start-btn" id="startBtn" onclick="startRound()">🚀 Start Round</button>
         </div>
     </div>
 
@@ -749,7 +749,7 @@
             document.getElementById('gameoverOverlay').classList.remove('active');
 
             showQuestion(false);
-            $('feedbackText').textContent = 'Press <strong>"Start Round"</strong> to begin!';
+            $('feedbackText').textContent = 'Press "Start Round" to begin! Match terms to definitions.';
             $('feedbackText').className = 'info-fb';
             $('startBtn').textContent = '🚀 Start Round';
             $('startBtn').disabled = false;
@@ -900,7 +900,7 @@
 
             setTimeout(() => {
                 moveToNext();
-            }, 3000); // Increased to 3 seconds
+            }, 3000);
         }
 
         // --- HANDLE ANSWER ---
@@ -953,7 +953,7 @@
 
             setTimeout(() => {
                 moveToNext();
-            }, 3000); // Increased to 3 seconds
+            }, 3000);
         }
 
         // --- MOVE TO NEXT ---
