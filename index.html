@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Distance DELTA Revision Games</title>
+    <title>Distance DELTA Revision Arcade</title>
     <style>
         * {
             box-sizing: border-box;
@@ -11,23 +11,25 @@
             padding: 0;
         }
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: #0a1628;
             color: #e8f0fe;
             min-height: 100vh;
             padding: 30px 20px;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 20% 30%, #1a3a6a, #0a1628 80%),
                 radial-gradient(circle at 80% 70%, #1a2a4a, transparent 60%);
         }
         .container {
-            max-width: 800px;
+            max-width: 820px;
             margin: 0 auto;
         }
+
+        /* --- Branding --- */
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
+            margin-bottom: 36px;
+            padding-bottom: 22px;
             border-bottom: 2px solid rgba(212, 175, 55, 0.15);
         }
         .brand {
@@ -43,6 +45,11 @@
             color: #8a9bb5;
             text-transform: uppercase;
         }
+        .brand .distance.small {
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+            margin-top: -2px;
+        }
         .brand .delta {
             font-size: 2.4rem;
             font-weight: 700;
@@ -57,19 +64,35 @@
             font-size: 1rem;
             opacity: 0.5;
             color: #b0c4e8;
-            margin-top: 8px;
+            margin-top: 10px;
         }
+        .header .count {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #f5d77b;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 20px;
+            padding: 3px 14px;
+            margin-top: 10px;
+        }
+
+        /* --- Categories --- */
         .category {
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
         .category h2 {
             font-size: 1.1rem;
             color: #f5d77b;
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            padding-bottom: 8px;
-            margin-bottom: 10px;
+            padding-bottom: 9px;
+            margin-bottom: 11px;
             letter-spacing: 1px;
         }
+
+        /* --- Game Links --- */
         .game-link {
             display: flex;
             justify-content: space-between;
@@ -77,7 +100,7 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
-            padding: 12px 18px;
+            padding: 13px 18px;
             margin-bottom: 6px;
             transition: all 0.3s ease;
             text-decoration: none;
@@ -91,65 +114,125 @@
         .game-link .left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 13px;
+            min-width: 0;
         }
         .game-link .icon {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
+            flex-shrink: 0;
         }
         .game-link .name {
             font-weight: 500;
+            display: block;
         }
         .game-link .desc {
             font-size: 0.75rem;
             opacity: 0.4;
+            display: block;
+            margin-top: 1px;
+        }
+        .game-link .right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .term-count {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8a9bb5;
+            opacity: 0.75;
+            white-space: nowrap;
+        }
+        .term-count .num {
+            color: #f5d77b;
+            font-weight: 700;
         }
         .game-link .play-btn {
             background: rgba(212, 175, 55, 0.12);
             border: 1px solid rgba(212, 175, 55, 0.15);
             color: #f5d77b;
-            padding: 4px 16px;
+            padding: 5px 17px;
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 600;
             transition: all 0.3s ease;
             flex-shrink: 0;
+            white-space: nowrap;
         }
         .game-link:hover .play-btn {
-            background: rgba(212, 175, 55, 0.2);
-            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.22);
+            border-color: rgba(212, 175, 55, 0.35);
         }
+
+        /* --- Footer --- */
         .footer {
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 44px;
+            padding-top: 22px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             font-size: 0.7rem;
             opacity: 0.3;
         }
+        .footer .hint {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.65rem;
+        }
+
+        /* --- Responsive --- */
         @media(max-width: 600px) {
-            body { padding: 16px; }
+            body { padding: 18px 12px; }
             .brand .distance { font-size: 1rem; }
-            .brand .delta { font-size: 1.8rem; }
-            .game-link { flex-wrap: wrap; gap: 6px; }
-            .game-link .play-btn { padding: 2px 12px; font-size: 0.6rem; }
+            .brand .distance.small { font-size: 0.85rem; letter-spacing: 5px; }
+            .brand .delta { font-size: 1.9rem; }
+            .header .sub { font-size: 0.85rem; }
+            .game-link {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 11px 14px;
+            }
+            .game-link .name { font-size: 0.9rem; }
+            .game-link .desc { font-size: 0.7rem; }
+            .game-link .right {
+                margin-left: 42px;
+                gap: 8px;
+            }
+            .term-count { font-size: 0.55rem; }
+            .game-link .play-btn {
+                padding: 4px 14px;
+                font-size: 0.65rem;
+            }
+            .category h2 { font-size: 1rem; }
+        }
+        @media(max-width: 420px) {
+            .game-link .left { gap: 10px; }
+            .game-link .icon { font-size: 1.05rem; }
+            .game-link .name { font-size: 0.82rem; }
+            .game-link .desc { font-size: 0.65rem; }
+            .game-link .right { margin-left: 36px; }
+            .term-count { font-size: 0.5rem; letter-spacing: 0.5px; }
         }
     </style>
 </head>
 <body>
+
     <div class="container">
         <div class="header">
             <div class="brand">
                 <span class="distance">The</span>
-                <span class="distance" style="font-size:1.1rem;letter-spacing:6px;margin-top:-2px;">Distance</span>
+                <span class="distance small">Distance</span>
                 <span class="delta">DELTA</span>
             </div>
             <div class="sub">Revision Arcade • Module 1 Terminology Games</div>
+            <div class="count">12 games</div>
         </div>
 
         <!-- PHONOLOGY -->
         <div class="category">
             <h2>🔹 Phonology</h2>
-            <a class="game-link" href="phonology-drag-drop.html">
+            <a class="game-link" href="Phonology Revision, Intonation, Stress, Connected Speech and Sounds, Drag and Drop.html">
                 <span class="left">
                     <span class="icon">📦</span>
                     <span>
@@ -157,9 +240,12 @@
                         <span class="desc">Sort terms into categories</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">20</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
-            <a class="game-link" href="phonology-odd-one-out.html">
+            <a class="game-link" href="Phonology Revision, Sounds, Odd One Out.html">
                 <span class="left">
                     <span class="icon">🤔</span>
                     <span>
@@ -167,9 +253,12 @@
                         <span class="desc">Find the term that doesn't belong</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">23</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
-            <a class="game-link" href="phonology-dominoes.html">
+            <a class="game-link" href="Phonology Revision, Sounds, Dominoes.html">
                 <span class="left">
                     <span class="icon">🀄</span>
                     <span>
@@ -177,9 +266,12 @@
                         <span class="desc">Match terms to definitions</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">23</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
-            <a class="game-link" href="phonology-snakes-ladders.html">
+            <a class="game-link" href="Phonology Revision, Connected Speech, Snakes and Ladders.html">
                 <span class="left">
                     <span class="icon">🎲</span>
                     <span>
@@ -187,14 +279,17 @@
                         <span class="desc">Board game with terminology questions</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">24</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
         </div>
 
         <!-- GRAMMAR & LEXIS -->
         <div class="category">
             <h2>🔹 Grammar &amp; Lexis</h2>
-            <a class="game-link" href="grammar-noughts-crosses.html">
+            <a class="game-link" href="Grammar Revision, Verbs, Noughts and Crosses.html">
                 <span class="left">
                     <span class="icon">❌</span>
                     <span>
@@ -202,9 +297,12 @@
                         <span class="desc">Play against an AI avatar</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">28</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
-            <a class="game-link" href="lexis-quiz.html">
+            <a class="game-link" href="Lexis Revision, Multiple Choice.html">
                 <span class="left">
                     <span class="icon">❓</span>
                     <span>
@@ -212,29 +310,35 @@
                         <span class="desc">Answer definitions correctly</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">23</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
         </div>
 
         <!-- DISCOURSE -->
         <div class="category">
             <h2>🔹 Discourse</h2>
-            <a class="game-link" href="discourse-millionaire.html">
+            <a class="game-link" href="Discourse Revision, Who Wants to be a Millionaire.html">
                 <span class="left">
                     <span class="icon">💰</span>
                     <span>
                         <span class="name">Who Wants to Be a Millionaire?</span>
-                        <span class="desc">Answer 15 questions to win!</span>
+                        <span class="desc">Answer 15 questions to win</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">22</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
         </div>
 
         <!-- METHODOLOGY & ACQUISITION -->
         <div class="category">
             <h2>🔹 Methodology &amp; Acquisition</h2>
-            <a class="game-link" href="methodology-race.html">
+            <a class="game-link" href="Methodology and Acquisition Revision, Race.html">
                 <span class="left">
                     <span class="icon">🏁</span>
                     <span>
@@ -242,14 +346,30 @@
                         <span class="desc">Race against the clock</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">24</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
+            </a>
+            <a class="game-link" href="Methodology and Acquisition Revision, Ladder.html">
+                <span class="left">
+                    <span class="icon">🪜</span>
+                    <span>
+                        <span class="name">Terminology Ladder</span>
+                        <span class="desc">Climb the ladder before the avatar does</span>
+                    </span>
+                </span>
+                <span class="right">
+                    <span class="term-count"><span class="num">18</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
         </div>
 
         <!-- TESTING -->
         <div class="category">
             <h2>🔹 Testing &amp; Assessment</h2>
-            <a class="game-link" href="testing-bingo.html">
+            <a class="game-link" href="Testing Revision, Bingo.html">
                 <span class="left">
                     <span class="icon">🎯</span>
                     <span>
@@ -257,14 +377,17 @@
                         <span class="desc">Race to match terms against an avatar</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">16</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
         </div>
 
         <!-- SKILLS -->
         <div class="category">
             <h2>🔹 Skills</h2>
-            <a class="game-link" href="skills-boggle.html">
+            <a class="game-link" href="Skills Revision, Boggle.html">
                 <span class="left">
                     <span class="icon">🔤</span>
                     <span>
@@ -272,13 +395,36 @@
                         <span class="desc">Match terms to definitions against the clock</span>
                     </span>
                 </span>
-                <span class="play-btn">▶ Play</span>
+                <span class="right">
+                    <span class="term-count"><span class="num">20</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
+            </a>
+        </div>
+
+        <!-- SYSTEMS & SKILLS (MIXED) -->
+        <div class="category">
+            <h2>🔹 Systems &amp; Skills (Mixed)</h2>
+            <a class="game-link" href="Systems and Skills Revision, Sort-It.html">
+                <span class="left">
+                    <span class="icon">🧩</span>
+                    <span>
+                        <span class="name">Terminology Sort-It</span>
+                        <span class="desc">Sort definitions into the correct zones</span>
+                    </span>
+                </span>
+                <span class="right">
+                    <span class="term-count"><span class="num">22</span> terms</span>
+                    <span class="play-btn">▶ Play</span>
+                </span>
             </a>
         </div>
 
         <div class="footer">
-            The Distance DELTA &bull; Module 1 Revision &bull; 10 Games
+            The Distance DELTA &bull; Module 1 Revision &bull; 12 Games
+            <span class="hint">All games run in your browser — no downloads required.</span>
         </div>
     </div>
+
 </body>
 </html>
