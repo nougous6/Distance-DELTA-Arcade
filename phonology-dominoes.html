@@ -192,7 +192,6 @@
             align-items: center;
             overflow: hidden;
         }
-        /* --- FIX: Consistent spacing for term --- */
         .domino-chain .domino-card .card-content {
             display: flex;
             flex-direction: column;
@@ -676,7 +675,7 @@
                 <span class="label">Matched:</span>
                 <span class="value" id="correctDisplay">0</span>
                 <span class="label">/</span>
-                <span id="totalDisplay">22</span>
+                <span id="totalDisplay">23</span>
             </div>
             <div class="stat-item">
                 <span class="icon">🔥</span>
@@ -694,7 +693,7 @@
         <div class="domino-area">
             <div class="round-info">
                 <span class="round-number" id="roundNumber">Round 1 of 3</span>
-                <span class="dominoes-placed">Dominoes placed: <span class="count" id="placedCount">0</span> / 22</span>
+                <span class="dominoes-placed">Dominoes placed: <span class="count" id="placedCount">0</span> / 23</span>
             </div>
             <div class="domino-chain" id="dominoChain">
                 <div class="domino-card start-card">
@@ -739,7 +738,7 @@
                     <span class="lbl">Score</span>
                 </div>
                 <div class="stat-box">
-                    <span class="num" id="finalCorrect">0/22</span>
+                    <span class="num" id="finalCorrect">0/23</span>
                     <span class="lbl">Matched</span>
                 </div>
                 <div class="stat-box">
@@ -1077,7 +1076,6 @@
                 endGame('🎉', "Amazing!", "You've completed all rounds!");
             } else {
                 loadRound();
-                currentTarget = null;
             }
         }
 
