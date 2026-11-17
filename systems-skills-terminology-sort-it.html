@@ -383,7 +383,7 @@
                 <div class="logo-divider"></div>
                 <div>
                     <h1>Terminology Sort-It</h1>
-                    <span class="sub">Systems &amp; Skills • 22 Definitions</span>
+                    <span class="sub">Systems &amp; Skills • 20 Definitions</span>
                 </div>
             </div>
         </div>
@@ -399,7 +399,7 @@
                 <span class="label">Sorted:</span>
                 <span class="score-value" id="sortedDisplay">0</span>
                 <span class="label">/</span>
-                <span id="totalDisplay">22</span>
+                <span id="totalDisplay">20</span>
             </div>
             <div class="stat-item">
                 <span class="icon">❤️</span>
@@ -449,7 +449,7 @@
                     <span class="lbl">Score</span>
                 </div>
                 <div class="stat-box">
-                    <span class="num" id="finalSorted">0/22</span>
+                    <span class="num" id="finalSorted">0/20</span>
                     <span class="lbl">Sorted</span>
                 </div>
                 <div class="stat-box">
@@ -473,7 +473,7 @@
             { id: "syllabus", name: "🗂️ Curriculum & Syllabus" }
         ];
 
-        // --- DATA: 22 Terms ---
+        // --- DATA: 20 Terms ---
         const ALL_TERMS = [
             { term: "Active Vocabulary", zone: "lexis", definition: "The set of words a learner can produce accurately and appropriately in speech or writing.", example: "📌 A learner understands 'ubiquitous' passively but would never use it — it is not in their active vocabulary." },
             { term: "Lexical Priming", zone: "lexis", definition: "The theory that encountering a word primes learners for its typical collocates, contexts, and grammatical patterns.", example: "📌 Hearing 'consequences' primes 'serious,' 'face,' and 'suffer' because they co-occur so regularly." },
@@ -487,12 +487,10 @@
             { term: "Mode", zone: "discourse", definition: "In register analysis, the channel of communication — spoken or written, and how it is delivered.", example: "📌 A text message has a different mode from a lecture, affecting features like abbreviation and spontaneity." },
             { term: "Content Schemata", zone: "skills", definition: "Background knowledge about topics and the world that supports comprehension.", example: "📌 Knowing how football works helps a learner understand a match report." },
             { term: "Formal Schemata", zone: "skills", definition: "Knowledge of how texts are organised rhetorically, including typical structures and conventions.", example: "📌 Knowing that a complaint email moves from reason → background → problem → requested action." },
-            { term: "Backchannelling", zone: "skills", definition: "Small listener responses that signal attention and understanding without taking a full turn.", example: "📌 'Uh-huh,' 'I see,' 'mmm' — the listener signals they are following without interrupting." },
             { term: "Inference", zone: "skills", definition: "Using clues in the text and background knowledge to work out meaning that is not stated explicitly.", example: "📌 A learner reads 'He glanced at his watch twice' and infers the speaker is impatient, though impatience is never mentioned." },
             { term: "Integrative Testing", zone: "testing", definition: "Assessment that requires learners to combine several language skills or systems at once.", example: "📌 A cloze test or dictation, which draws on reading, grammar, and lexis simultaneously." },
             { term: "Objective Test", zone: "testing", definition: "A test in which each item has a single correct answer, allowing consistent marking without judgement.", example: "📌 Multiple-choice, true/false, and matching items." },
             { term: "Subjective Test", zone: "testing", definition: "A test in which the marker must exercise judgement to decide the quality of a response, so scores can vary between markers.", example: "📌 An essay or a speaking test, judged against band descriptors." },
-            { term: "Competence", zone: "grammar", definition: "The speaker's underlying, internalised knowledge of language, as opposed to actual performance.", example: "📌 A learner knows the rule for articles (competence) but makes slips when speaking under pressure (performance)." },
             { term: "Descriptive Grammar", zone: "grammar", definition: "An account of how language is actually used by speakers, without judgements of correctness.", example: "📌 Describing that 'between you and I' is widely used, rather than declaring it wrong." },
             { term: "Prescriptive Grammar", zone: "grammar", definition: "Rules about how language should be used according to a standard or authority.", example: "📌 'Never end a sentence with a preposition' — a prescriptive rule not always followed in practice." },
             { term: "Functional–Notional Syllabus", zone: "syllabus", definition: "A syllabus organised by communicative functions and semantic notions rather than grammatical structures.", example: "📌 Organised around 'requesting,' 'apologising,' 'talking about the past,' and 'expressing quantity.'" },
@@ -511,7 +509,7 @@
             gameActive: false,
             gameOver: false,
             shuffledTerms: [],
-            total: 22
+            total: 20
         };
 
         const $ = id => document.getElementById(id);
